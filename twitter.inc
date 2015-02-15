@@ -28,7 +28,7 @@ function twitter_connect($account = NULL) {
   if ($account) {
     $auth = $account->get_auth();
     if (isset($auth['oauth_token']) && isset($auth['oauth_token_secret'])) {
-      return new Twitter(variable_get('twitter_consumer_key', ''), variable_get('twitter_consumer_secret', ''),
+      return new Twitter(config_get('twitter.settings','twitter_consumer_key'), config_get('twitter.settings','twitter_consumer_secret'),
                               $auth['oauth_token'], $auth['oauth_token_secret']);
     }
   }
@@ -50,7 +50,7 @@ function twitter_account_save($twitter_user, $save_auth = FALSE) {
   if ($save_auth) {
     $values += $twitter_user->get_auth();
   }
-  $schema = drupal_get_schema('twitter_account');
+  $schema = backdrop_get_schema('twitter_account');
   foreach ($values as $k => $v) {
     if (!isset($schema['fields'][$k])) {
       unset($values[$k]);
@@ -75,6 +75,7 @@ function twitter_account_save($twitter_user, $save_auth = FALSE) {
  *   TwitterUser object or NULL.
  */
 function twitter_account_load($id) {
+  module_load_include('php','twitter','twitter.lib'); //added for backdrop
   $values = db_query('SELECT *
                       FROM {twitter_account}
                       WHERE twitter_uid = :id_1

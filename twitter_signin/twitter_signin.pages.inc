@@ -10,28 +10,44 @@
 function twitter_signin_admin_settings($form, &$form_state) {
   $form = array();
 
-  $img_path = drupal_get_path('module', 'twitter_signin') . '/images';
+  $img_path = backdrop_get_path('module', 'twitter_signin') . '/images';
   $results = file_scan_directory($img_path, '/.png/');
 
   $options = array();
   foreach ($results as $image) {
-    $options[$image->filename] = theme('image', array('path' => $image->uri));
+    $options[$image->filename] = theme('image', array('uri' => $image->uri));
   }
 
   $form['twitter_signin_button'] = array(
     '#type' => 'radios',
     '#title' => t('Select sign-in button'),
     '#options' => $options,
-    '#default_value' => variable_get('twitter_signin_button', 'Sign-in-with-Twitter-lighter-small.png'),
+    '#default_value' => config_get('twitter_signin.settings','twitter_signin_button'),
   );
 
   $form['twitter_signin_register'] = array(
     '#title' => t('Automatically register new users'),
     '#type' => 'radios',
     '#options' => array(t('No'), t('Yes')),
-    '#default_value' => variable_get('twitter_signin_register', 0),
+    '#default_value' => config_get('twitter_signin.settings','twitter_signin_register'),
     '#description' => t('Warning, if you enable this, new user accounts will be created without email addresses.'),
   );
 
-  return system_settings_form($form);
+
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
+  );
+
+  return $form;
+}
+
+// Add a submit function to process config
+function twitter_signin_admin_settings_submit($form, &$form_state) {
+  $config = config('twitter_signin.settings');
+  $config->set('twitter_signin_button', $form_state['values']['twitter_signin_button']);
+  $config->set('twitter_signin_register', $form_state['values']['twitter_signin_register']);
+  $config->save();
+  backdrop_set_message(t('The configuration options have been saved.'));
 }

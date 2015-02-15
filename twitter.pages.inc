@@ -8,16 +8,17 @@
  * Twitter settings form.
  */
 function twitter_admin_form($form, &$form_state) {
+  $config = config('twitter.settings');
   $form['twitter_import'] = array(
     '#type' => 'checkbox',
     '#title' => t('Import and display the Twitter statuses of site users who have entered their Twitter account information.'),
-    '#default_value' => variable_get('twitter_import', 1),
+    '#default_value' => $config->get('twitter_import'),
   );
   $form['twitter_expire'] = array(
     '#type' => 'select',
     '#title' => t('Delete old statuses'),
-    '#default_value' => variable_get('twitter_expire', 0),
-    '#options' => array(0 => t('Never')) + drupal_map_assoc(array(604800, 2592000, 7776000, 31536000), 'format_interval'),
+    '#default_value' => $config->get('twitter_expire'),
+    '#options' => array(0 => t('Never')) + backdrop_map_assoc(array(604800, 2592000, 7776000, 31536000), 'format_interval'),
     '#states' => array(
       'visible' => array(
         ':input[name=twitter_import]' => array('checked' => TRUE),
@@ -39,12 +40,12 @@ function twitter_admin_form($form, &$form_state) {
   $form['oauth']['twitter_consumer_key'] = array(
     '#type' => 'textfield',
     '#title' => t('OAuth Consumer key'),
-    '#default_value' => variable_get('twitter_consumer_key', NULL),
+    '#default_value' => $config->get('twitter_consumer_key'),
   );
   $form['oauth']['twitter_consumer_secret'] = array(
     '#type' => 'textfield',
     '#title' => t('OAuth Consumer secret'),
-    '#default_value' => variable_get('twitter_consumer_secret', NULL),
+    '#default_value' => $config->get('twitter_consumer_secret'),
   );
 
   // Twitter external APIs settings.
@@ -57,25 +58,48 @@ function twitter_admin_form($form, &$form_state) {
   $form['twitter']['twitter_host'] = array(
     '#type' => 'textfield',
     '#title' => t('Twitter host'),
-    '#default_value' => variable_get('twitter_host', TWITTER_HOST),
+    '#default_value' => $config->get('twitter_host'),
   );
   $form['twitter']['twitter_api'] = array(
     '#type' => 'textfield',
     '#title' => t('Twitter API'),
-    '#default_value' => variable_get('twitter_api', TWITTER_API),
+    '#default_value' => $config->get('twitter_api'),
   );
   $form['twitter']['twitter_search'] = array(
     '#type' => 'textfield',
     '#title' => t('Twitter search'),
-    '#default_value' => variable_get('twitter_search', TWITTER_SEARCH),
+    '#default_value' => $config->get('twitter_search'),
   );
   $form['twitter']['twitter_tinyurl'] = array(
     '#type' => 'textfield',
     '#title' => t('TinyURL'),
-    '#default_value' => variable_get('twitter_tinyurl', TWITTER_TINYURL),
+    '#default_value' => $config->get('twitter_tinyurl'),
   );
 
-  return system_settings_form($form);
+// Add a submit button
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
+  );
+  
+// Return the form!
+  return $form;
+}
+
+// Add a submit function to process config
+function twitter_admin_form_submit($form, &$form_state) {
+  $config = config('twitter.settings');
+  $config->set('twitter_import', $form_state['values']['twitter_import']);
+  $config->set('twitter_expire', $form_state['values']['twitter_expire']);
+  $config->set('twitter_consumer_key', $form_state['values']['twitter_consumer_key']);
+  $config->set('twitter_consumer_secret', $form_state['values']['twitter_consumer_secret']);
+  $config->set('twitter_host', $form_state['values']['twitter_host']);
+  $config->set('twitter_api', $form_state['values']['twitter_api']);
+  $config->set('twitter_search', $form_state['values']['twitter_search']);
+  $config->set('twitter_tinyurl', $form_state['values']['twitter_tinyurl']);
+  $config->save();
+  backdrop_set_message(t('The configuration options have been saved.'));
 }
 
 /**
@@ -112,7 +136,7 @@ function twitter_user_settings($account = NULL) {
       $variables = array('@tweets' => url('tweets'));
       $output['header']['#markup'] .= t('You can view the full list of tweets at the <a href="@tweets">Tweets</a> view.', $variables);
       $output['header']['#markup'] .= '</p>';
-      $output['list_form'] = drupal_get_form('twitter_account_list_form', $twitter_accounts);
+      $output['list_form'] = backdrop_get_form('twitter_account_list_form', $twitter_accounts);
     }
     else {
       // No accounts added. Inform about how to add one.
@@ -130,15 +154,15 @@ function twitter_user_settings($account = NULL) {
     );
 
     if (user_access('add authenticated twitter accounts')) {
-      $output['add_account']['form'] = drupal_get_form('twitter_auth_account_form');
+      $output['add_account']['form'] = backdrop_get_form('twitter_auth_account_form');
     }
     if (twitter_connect()) {
-      $output['add_account']['non_auth'] = drupal_get_form('twitter_non_auth_account_form');
+      $output['add_account']['non_auth'] = backdrop_get_form('twitter_non_auth_account_form');
     }
   }
 
   // Give a chance to other modules to alter the output.
-  drupal_alter('twitter_user_settings', $output);
+  backdrop_alter('twitter_user_settings', $output);
 
   return $output;
 }
@@ -260,26 +284,26 @@ function theme_twitter_account_list_form($variables) {
   foreach (element_children($form['accounts']) as $key) {
     $element = &$form['accounts'][$key];
     $row = array(
-      drupal_render($element['image']),
-      drupal_render($element['id']) . drupal_render($element['screen_name']) .
-        drupal_render($element['visible_name']),
-      drupal_render($element['description']),
+      backdrop_render($element['image']),
+      backdrop_render($element['id']) . backdrop_render($element['screen_name']) .
+        backdrop_render($element['visible_name']),
+      backdrop_render($element['description']),
     );
     if (user_access('administer twitter accounts')) {
-      $row[] = drupal_render($element['user']);
+      $row[] = backdrop_render($element['user']);
     }
     $row = array_merge($row, array(
-      drupal_render($element['auth']),
-      drupal_render($element['protected']),
-      drupal_render($element['import']),
-      drupal_render($element['mentions']),
-      drupal_render($element['delete']),
+      backdrop_render($element['auth']),
+      backdrop_render($element['protected']),
+      backdrop_render($element['import']),
+      backdrop_render($element['mentions']),
+      backdrop_render($element['delete']),
     ));
     $rows[] = $row;
   }
 
   $output = theme('table', array('header' => $header, 'rows' => $rows));
-  $output .= drupal_render_children($form);
+  $output .= backdrop_render_children($form);
   return $output;
 }
 
@@ -295,11 +319,11 @@ function twitter_account_list_form_submit($form, &$form_state) {
     else {
       $twitter_account = twitter_account_load($account['id']);
       twitter_account_delete($account['id']);
-      drupal_set_message(t('The Twitter account <em>!account</em> was deleted.',
+      backdrop_set_message(t('The Twitter account <em>!account</em> was deleted.',
         array('!account' => $twitter_account->screen_name)));
     }
   }
-  drupal_set_message(t('The Twitter account settings were updated.'));
+  backdrop_set_message(t('The Twitter account settings were updated.'));
 }
 
 /**
@@ -321,8 +345,8 @@ function twitter_auth_account_form($form, $form_state) {
  * Form validation for adding a new Twitter account.
  */
 function twitter_auth_account_form_validate($form, &$form_state) {
-  $key = variable_get('twitter_consumer_key', '');
-  $secret = variable_get('twitter_consumer_secret', '');
+  $key = config_get('twitter.settings','twitter_consumer_key');
+  $secret = config_get('twitter.settings','twitter_consumer_secret');
   if ($key == '' || $secret == '') {
     form_set_error('', t('Please configure your consumer key and secret key at ' .
       '<a href="!url">Twitter settings</a>.', array( '!url' => url('admin/config/services/twitter'),
@@ -331,13 +355,14 @@ function twitter_auth_account_form_validate($form, &$form_state) {
 }
 
 /**
- * Form submit handler for adding a Twiter account.
+ * Form submit handler for adding a Twitter account.
  *
  * Loads Twitter account details and adds them to the user account
  */
 function twitter_auth_account_form_submit($form, &$form_state) {
-  $key = variable_get('twitter_consumer_key', '');
-  $secret = variable_get('twitter_consumer_secret', '');
+  module_load_include('php','twitter','twitter.lib'); //added for backdrop
+  $key = config_get('twitter.settings','twitter_consumer_key');
+  $secret = config_get('twitter.settings','twitter_consumer_secret');
   $twitter = new Twitter($key, $secret);
   $token = $twitter->get_request_token();
   if ($token) {
@@ -349,33 +374,33 @@ function twitter_auth_account_form_submit($form, &$form_state) {
       overlay_deliver_empty_page();
     }
     else {
-      drupal_goto($twitter->get_authorize_url($token));
+      backdrop_goto($twitter->get_authorize_url($token));
     }
   }
   else {
-    drupal_set_message(t('Could not obtain a valid token from the Twitter API. Please review the configuration.'),
+    backdrop_set_message(t('Could not obtain a valid token from the Twitter API. Please review the configuration.'),
       'error');
   }
 }
 
 /**
- * Wrapper to call drupal_form_submit() which wasn't required in D6.
+ * Wrapper to call backdrop_form_submit() which wasn't required in D6.
  */
 function twitter_oauth_callback() {
   if (isset($_GET['denied']) || empty($_GET['oauth_token'])) {
-    drupal_set_message(t('The connection to Twitter failed. Please try again.'), 'error');
+    backdrop_set_message(t('The connection to Twitter failed. Please try again.'), 'error');
     global $user;
     if ($user->uid) {
       // User is logged in, was attempting to OAuth a Twitter account.
-      drupal_goto('admin/config/services/twitter');
+      backdrop_goto('admin/config/services/twitter');
     }
     else {
       // Anonymous user, redirect to front page.
-      drupal_goto('<front>');
+      backdrop_goto('<front>');
     }
   }
   $form_state['values']['oauth_token'] = $_GET['oauth_token'];
-  drupal_form_submit('twitter_oauth_callback_form', $form_state);
+  backdrop_form_submit('twitter_oauth_callback_form', $form_state);
 }
 
 /**
@@ -397,8 +422,8 @@ function twitter_oauth_callback_form($form, &$form_state) {
  * Validate results from Twitter OAuth return request.
  */
 function twitter_oauth_callback_form_validate($form, &$form_state) {
-  $key = variable_get('twitter_consumer_key', '');
-  $secret = variable_get('twitter_consumer_secret', '');
+  $key = config_get('twitter.settings','twitter_consumer_key');
+  $secret = config_get('twitter.settings','twitter_consumer_secret');
 
   if (isset($_SESSION['twitter_oauth'])) {
     $form_state['twitter_oauth'] = $_SESSION['twitter_oauth'];
@@ -422,6 +447,7 @@ function twitter_oauth_callback_form_validate($form, &$form_state) {
   }
 
   module_load_include('inc', 'twitter');
+  module_load_include('php','twitter','twitter.lib'); //added for backdrop
 
   if ($twitter = new Twitter($key, $secret, $token['oauth_token'], $token['oauth_token_secret'])) {
     //Collect oauth_verifier from url
@@ -442,10 +468,12 @@ function twitter_oauth_callback_form_validate($form, &$form_state) {
  * in the DB.
  */
 function twitter_oauth_callback_form_submit($form, &$form_state) {
-  $key = variable_get('twitter_consumer_key', '');
-  $secret = variable_get('twitter_consumer_secret', '');
+  $key = config_get('twitter.settings','twitter_consumer_key');
+  $secret = config_get('twitter.settings','twitter_consumer_secret');
   $response = $form_state['twitter_oauth']['response'];
-
+  
+  module_load_include('php','twitter','twitter.lib'); //added for backdrop
+  
   $twitter = new Twitter($key, $secret, $response['oauth_token'], $response['oauth_token_secret']);
   try {
     $twitter_account = $twitter->users_show($response['screen_name']);
@@ -509,6 +537,6 @@ function twitter_non_auth_account_form_submit($form, &$form_state) {
     global $user;
     $twitter_account->uid = $user->uid;
     twitter_account_save($twitter_account, FALSE);
-    drupal_set_message(t('Twitter account added successfully'));
+    backdrop_set_message(t('Twitter account added successfully'));
   }
 }

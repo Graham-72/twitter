@@ -1,4 +1,4 @@
 name = Twitter actions
-description = Exposes Drupal actions to send Twitter messages.
-core = 7.x
+description = Exposes Backdrop actions to send Twitter messages.
+backdrop = 1.x
 dependencies[] = twitter

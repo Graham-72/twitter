@@ -52,7 +52,7 @@ function _twitter_rules_account_options(RulesPlugin $element, $param_name) {
  * @param $message
  *   The message to post
  * @param $sender
- *   The Drupal user that has a Twitter account
+ *   The Backdrop user that has a Twitter account
  */
 function twitter_actions_set_status($message, $sender) {
   $twitter_uid = _twitter_actions_get_twitter_id($sender);

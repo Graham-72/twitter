@@ -3,7 +3,7 @@
  * of characters remaining to achieve the max length
  */
 (function ($) {
-  Drupal.behaviors.twitter_post = {
+  Backdrop.behaviors.twitter_post = {
     attach: function (context, settings) {
       $("#twitter-textfield", context).keyup(function() {
         var charsLeft = (140 - $(this).val().length);

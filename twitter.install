@@ -14,8 +14,8 @@ function twitter_requirements($phase) {
   if ($phase == 'runtime') {
     // Verify that the Twitter Application keys are set.
     $requirements['twitter_keys'] = array('title' => $t('Twitter Application keys'));
-    $consumer_key = variable_get('twitter_consumer_key', NULL);
-    $consumer_secret = variable_get('twitter_consumer_secret', NULL);
+    $consumer_key = config_get('twitter.settings','twitter_consumer_key');
+    $consumer_secret = config_get('twitter.settings','twitter_consumer_secret');
     if (empty($consumer_key) || empty($consumer_secret)) {
       $requirements['twitter_keys']['value'] = $t('Missing');
       $requirements['twitter_keys']['description'] =
@@ -438,7 +438,7 @@ function twitter_update_7500() {
  * Updates twitter_search variable to point to http://twitter.com
  */
 function twitter_update_7501(&$sandbox) {
-  variable_set('twitter_search', 'http://twitter.com');
+  config_set('twitter.settings','twitter_search', 'http://twitter.com');
 }
 
 /**

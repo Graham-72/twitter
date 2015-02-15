@@ -1,0 +1,9 @@
+{
+    "_config_name": "twitter_post.settings",
+    "twitter_post_types": {
+        "article": "article",
+        "page": "page"
+    },
+    "twitter_post_default_format": "",
+    "twitter_post_default_value": "0"
+}

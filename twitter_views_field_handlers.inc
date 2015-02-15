@@ -13,7 +13,7 @@ class twitter_views_handler_field_xss extends views_handler_field {
     $options['link_urls'] = array('default' => TRUE);
     $options['link_usernames'] = array('default' => TRUE);
     $options['link_hashtags'] = array('default' => FALSE);
-    $options['hashtags_url'] = array('default' => variable_get('twitter_search', TWITTER_SEARCH) . '/search?q=%23');
+    $options['hashtags_url'] = array('default' => config_get('twitter.settings.'twitter_search') . '/search?q=%23');
     $options['link_attributes'] = array('default' => TRUE);
     return $options;
   }
@@ -62,7 +62,7 @@ class twitter_views_handler_field_xss extends views_handler_field {
     }
     // Link usernames with their profiles.
     if (!empty($this->options['link_usernames'])) {
-      $value = _twitter_filter_text($value, '@', variable_get('twitter_host', TWITTER_HOST) . '/');
+      $value = _twitter_filter_text($value, '@', config_get('twitter.settings','twitter_host') . '/');
     }
     // Link hashtags.
     if (!empty($this->options['link_hashtags']) && valid_url($this->options['hashtags_url'])) {
@@ -107,7 +107,7 @@ class twitter_views_handler_field_web_intents extends views_handler_field {
   }
 
   function render($values) {
-    drupal_add_js('//platform.twitter.com/widgets.js', 'external');
+    backdrop_add_js('//platform.twitter.com/widgets.js', 'external');
     return '<span><a href="https://twitter.com/intent/tweet?in_reply_to=' . $values->twitter_id . '">Reply</a></span> ' .
       '<span><a href="https://twitter.com/intent/retweet?tweet_id=' . $values->twitter_id . '">Retweet</a></span> ' .
       '<span><a href="https://twitter.com/intent/favorite?tweet_id=' . $values->twitter_id . '">Favorite</a></span>';
@@ -123,7 +123,7 @@ class twitter_views_handler_field_follow extends views_handler_field {
   function query() {}
 
   function render($values) {
-    drupal_add_js('//platform.twitter.com/widgets.js', 'external');
+    backdrop_add_js('//platform.twitter.com/widgets.js', 'external');
     return '<span><a href="https://twitter.com/intent/user?screen_name=' . $values->twitter_screen_name . '">Follow</a></span>';
   }
 }
@@ -137,8 +137,8 @@ class twitter_views_handler_field_formatted_tweet extends views_handler_field {
   function query() {}
 
   function render($values) {
-    drupal_add_js('//platform.twitter.com/widgets.js', 'external');
-    drupal_add_css(drupal_get_path('module', 'twitter') . '/twitter.css');
+    backdrop_add_js('//platform.twitter.com/widgets.js', 'external');
+    backdrop_add_css(backdrop_get_path('module', 'twitter') . '/twitter.css');
     module_load_include('inc', 'twitter');
 
     // Load tweet and author.

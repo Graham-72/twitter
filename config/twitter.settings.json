@@ -1,0 +1,11 @@
+{
+    "_config_name": "twitter.settings",
+    "twitter_import": 1,
+    "twitter_expire": "0",
+    "twitter_consumer_key": "",
+    "twitter_consumer_secret": "",
+    "twitter_host": "http://twitter.com",
+    "twitter_api": "https://api.twitter.com",
+    "twitter_search": "http://search.twitter.com",
+    "twitter_tinyurl": "http://tinyurl.com"
+}

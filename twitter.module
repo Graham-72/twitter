@@ -16,7 +16,7 @@ function twitter_menu() {
   $items['twitter/oauth'] = array(
     'title' => 'Twitter OAuth',
     'access callback' => TRUE,
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('twitter_oauth_callback'),
     'type' => MENU_CALLBACK,
     'file' => 'twitter.pages.inc',
@@ -38,7 +38,7 @@ function twitter_menu() {
   $items['admin/config/services/twitter/settings'] = array(
     'title' => 'Settings',
     'description' => 'Twitter settings.',
-    'page callback' => 'drupal_get_form',
+    'page callback' => 'backdrop_get_form',
     'page arguments' => array('twitter_admin_form'),
     'access arguments' => array('administer site configuration'),
     'file' => 'twitter.pages.inc',
@@ -99,7 +99,7 @@ function twitter_theme() {
         'author' => NULL,
       ),
       'template' => 'tweet',
-      'path' => drupal_get_path('module', 'twitter'),
+      'path' => backdrop_get_path('module', 'twitter'),
     ),
     'twitter_user_accounts' => array(
       'variables' => array(
@@ -139,7 +139,7 @@ function twitter_shorten_url($url) {
     return shorten_url($url);
   }
   else {
-    $response = drupal_http_request(variable_get('twitter_tinyurl', TWITTER_TINYURL) . "/api-create.php?url=" . $url);
+    $response = backdrop_http_request(config_get('twitter.settings','twitter_tinyurl') . "/api-create.php?url=" . $url);
     if ($response->code == 200) {
       return $response->data;
     }
@@ -155,7 +155,7 @@ function twitter_shorten_url($url) {
  * Imports new Twitter statuses for site users, and deletes expired tweets.
  */
 function twitter_cron() {
-  if (!variable_get('twitter_import', TRUE)) {
+  if (!config_get('twitter.settings','twitter_import')) {
     return;
   }
   // Check if we can connect to Twitter before proceeding.
@@ -194,7 +194,7 @@ function twitter_cron() {
   }
 
   // Nuke old statuses.
-  if ($age = variable_get('twitter_expire', 0)) {
+  if ($age = config_get('twitter.settings','twitter_expire')) {
     db_delete('twitter')
       ->condition('created_time', REQUEST_TIME - $age, '<')
       ->execute();
@@ -256,7 +256,7 @@ function _twitter_filter_tip_link($filter, $format, $long = FALSE) {
  */
 function _twitter_filter_username($text, $filter) {
   $prefix = '@';
-  $destination = variable_get('twitter_host', TWITTER_HOST) . '/';
+  $destination = config_get('twitter.settings','twitter_host') . '/';
   return _twitter_filter_text($text, $prefix, $destination);
 }
 
@@ -265,7 +265,7 @@ function _twitter_filter_username($text, $filter) {
  */
 function _twitter_filter_hashtag($text, $filter) {
   $prefix = '#';
-  $destination = variable_get('twitter_search', TWITTER_SEARCH) . '/search?q=%23';
+  $destination = config_get('twitter.settings','twitter_search') . '/search?q=%23';
   return _twitter_filter_text($text, $prefix, $destination);
 }
 
@@ -275,7 +275,7 @@ function _twitter_filter_hashtag($text, $filter) {
  */
 function _twitter_filter_text($text, $prefix, $destination) {
   $matches = array(
-    '/\>' . $prefix . '(\w+)/ui',
+     '/\>' . $prefix . '(\w+)/ui',
     '/^' . $prefix . '(\w+)/ui',
     '/(\s+)' . $prefix . '(\w+)/ui',
   );
@@ -366,8 +366,8 @@ function twitter_user_view_alter(&$build) {
  *   boolean TRUE if both the Twitter Application key and secret are set.
  */
 function twitter_api_keys() {
-  $key = variable_get('twitter_consumer_key');
-  $secret = variable_get('twitter_consumer_secret');
+  $key = config_get('twitter.settings','twitter_consumer_key');
+  $secret = config_get('twitter.settings','twitter_consumer_secret');
   return !(empty($key) && empty($secret));
 }
 
@@ -376,4 +376,15 @@ function twitter_api_keys() {
  */
 function _twitter_user_profile($screen_name) {
   return l('@' . $screen_name, TWITTER_HOST . '/' . $screen_name);
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function twitter_config_info() {
+  $prefixes['twitter.settings'] = array(
+    'label' => t('Twitter settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
 }

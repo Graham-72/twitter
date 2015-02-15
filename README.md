@@ -24,9 +24,9 @@ You can find further installation instructions at http://drupal.org/node/1346824
 2. Select the text format where you want to use the filters.
 3. At "Enabled filters" check the Twitter converters.
 
-After that, clear cache and try to create a page with the following body:
+After that, clear cache and try to create a page with the following body: 
 
-#backdropCMS @backdropCMS 
+"#backdropCMS @backdropCMS"
 
 The above links to a search in Twitter over the #backdropCMS tag and a to the @backdropCMS profile.
 These filters are avilable when configuring a tweets Views.

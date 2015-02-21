@@ -388,3 +388,24 @@ function twitter_config_info() {
   );
   return $prefixes;
 }
+
+
+/**
+ * Implements hook_autoload_info().
+ */
+function twitter_autoload_info(){
+  return array(
+    'twitter_views_handler_field_xss' => 'twitter_views_field_handlers.inc',
+    'twitter_views_handler_field_profile_image' => 'twitter_views_field_handlers.inc',
+    'twitter_views_handler_field_web_intents' => 'twitter_views_field_handlers.inc',
+    'twitter_views_handler_field_follow' => 'twitter_views_field_handlers.inc',
+    'twitter_views_handler_field_formatted_tweet' => 'twitter_views_field_handlers.inc',
+    'twitter_views_handler_field_image' => 'twitter_views_field_handlers.inc',
+    'TwitterStatus' => 'twitter.lib.inc',
+    'TwitterUser' => 'twitter.lib.inc',
+    'TwitterException' => 'twitter.lib.inc',
+    'Twitter' => 'twitter.lib.inc',
+    'TwitterTest' => 'tests/core.test',
+    'TwitterInputFilterTest' => 'tests/input_filters.test',
+   );
+}

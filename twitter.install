@@ -338,144 +338,36 @@ function twitter_install() {
 }
 
 /**
- * Implements hook_uninstall().
+ * Move twitter settings from variables to config.
  */
-function twitter_uninstall() {
-  // Remove variables
-  variable_del('twitter_import');
-  variable_del('twitter_expire');
-  variable_del('twitter_consumer_key');
-  variable_del('twitter_consumer_secret');
-  variable_del('twitter_host');
-  variable_del('twitter_signin_button');
-  variable_del('twitter_signin_register');
-  variable_del('twitter_host');
-  variable_del('twitter_api');
-  variable_del('twitter_search');
-  variable_del('twitter_tinyurl');
+function twitter_update_1000() {
+  // Migrate variables to config.
+  $config = config('twitter.settings');
+  $config->set('twitter_import', update_variable_get('twitter_import', '1'));
+  $config->set('twitter_expire', update_variable_get('twitter_expire', '0'));
+  $config->set('twitter_consumer_key', update_variable_get('twitter_consumer_key', ''));
+  $config->set('twitter_consumer_secret', update_variable_get('twitter_consumer_secret', ''));
+  $config->set('twitter_host', update_variable_get('twitter_host', 'http://twitter.com'));
+  $config->set('twitter_api', update_variable_get('twitter_api', 'https://api.twitter.com'));
+  $config->set('twitter_search', update_variable_get('twitter_search', 'http://search.twitter.com'));
+  $config->set('twitter_tinyurl', update_variable_get('twitter_tinyurl', 'http://tinyurl.com'));
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('twitter_import');
+  update_variable_del('twitter_expire');
+  update_variable_del('twitter_consumer_key');
+  update_variable_del('twitter_consumer_secret');
+  update_variable_del('twitter_host');
+  update_variable_del('twitter_api');
+  update_variable_del('twitter_search');
+  update_variable_del('twitter_tinyurl');
 }
 
 /**
- * Removes password field
+ * Implements hook_update_last_removed().
  */
-function twitter_update_7300() {
-  db_drop_field('twitter_account', 'password');
-  return t('Password field was removed from Twitter accounts.');
+function twitter_update_last_removed() {
+  return 7503;
 }
 
-/**
- * Removes include_retweets field
- */
-function twitter_update_7301() {
-  if (db_field_exists('twitter_account', 'include_retweets')) {
-    db_drop_field('twitter_account', 'include_retweets');
-    return t('Include Retweets field was removed from Twitter accounts.');
-  }
-}
-
-/**
- * Adds field mentions to twitter_account table.
- */
-function twitter_update_7400() {
-  $data = array(
-    'description' => "Boolean flag indicating whether the {twitter_user}'s mentions should be pulled in by the site.",
-    'type' => 'int',
-    'unsigned' => TRUE,
-    'not null' => TRUE,
-    'default' => 0,
-  );
-  db_add_field('twitter_account', 'mentions', $data);
-}
-
-/**
- * Drops field uid at twitter_account.
- *
- * This update has been set empty afterwards as the field is actually needed.
- */
-function twitter_update_7401() {}
-
-/**
- * Makes the import field not enabled by default at twitter_account table.
- */
-function twitter_update_7402() {
-  $spec = array(
-    'description' => "Boolean flag indicating whether the {twitter_user}'s posts should be pulled in by the site.",
-    'type' => 'int',
-    'unsigned' => TRUE,
-    'not null' => TRUE,
-    'default' => 0,
-  );
-
-  db_change_field('twitter_account', 'import', 'import', $spec);
-}
-
-/**
- * Adds field added_by_uid to twitter_account table.
- *
- * This update has been set empty afterwards as the existing field twitter_account.uid is used.
- */
-function twitter_update_7403() {}
-
-/**
- * Renames twitter_account.added_by_uid to twitter_account.uid.
- *
- * This reverts update 7403.
- */
-function twitter_update_7500() {
-  if (db_field_exists('twitter_account', 'added_by_uid')) {
-    $spec = array(
-      'description' => "The uid of the user who added this Twitter account.",
-      'type' => 'int',
-      'unsigned' => TRUE,
-      'not null' => TRUE,
-      'default' => 0,
-    );
-    db_change_field('twitter_account', 'added_by_uid', 'uid', $spec);
-  }
-}
-
-/**
- * Updates twitter_search variable to point to http://twitter.com
- */
-function twitter_update_7501(&$sandbox) {
-  config_set('twitter.settings','twitter_search', 'http://twitter.com');
-}
-
-/**
- * Add entities field to the twitter post table.
- */
-function twitter_update_7502(&$sandbox) {
-  if (!db_field_exists('twitter', 'entities')) {
-    db_add_field('twitter', 'entities', array(
-      'type' => 'blob',
-      'not null' => FALSE,
-      'size' => 'big',
-      'serialize' => TRUE,
-      'description' => 'A serialized array of {twitter} post entities.',
-    ));
-  }
-}
-
-
-/**
- * Update the twitter_id column to a big int, rather than a float-type value
- */
-function twitter_update_7503() {
-  db_drop_primary_key('twitter');
-  $spec = array(
-    'description' => "Unique identifier for each {twitter} post.",
-    'type' => 'int',
-    'unsigned' => TRUE,
-    'size' => 'big',
-    'not null' => TRUE,
-    'default' => 0,
-  );
-  $index_spec = array(
-    'primary key' => array('twitter_id'),
-    );
-  db_change_field('twitter',
-    'twitter_id',
-    'twitter_id',
-    $spec,
-    $index_spec);
-}

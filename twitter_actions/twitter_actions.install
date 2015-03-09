@@ -1,0 +1,13 @@
+<?php
+/**
+ * Move twitter_actions settings from variables to config.
+ */
+function twitter_actions_update_1000() {
+  // Migrate variables to config.
+  $config = config('twitter_actions.settings');
+  $config->set('site_name', update_variable_get('site_name', ' '));
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('site_name');
+}

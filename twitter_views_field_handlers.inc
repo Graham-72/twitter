@@ -13,7 +13,7 @@ class twitter_views_handler_field_xss extends views_handler_field {
     $options['link_urls'] = array('default' => TRUE);
     $options['link_usernames'] = array('default' => TRUE);
     $options['link_hashtags'] = array('default' => FALSE);
-    $options['hashtags_url'] = array('default' => config_get('twitter.settings.'twitter_search') . '/search?q=%23');
+    $options['hashtags_url'] = array('default' => config_get('twitter.settings'.'twitter_search') . '/search?q=%23');
     $options['link_attributes'] = array('default' => TRUE);
     return $options;
   }

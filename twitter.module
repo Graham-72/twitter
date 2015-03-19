@@ -298,7 +298,10 @@ function _twitter_filter_link($text, $filter) {
  * Implements hook_views_api().
  */
 function twitter_views_api() {
-  return array('api' => 2);
+  return array(
+    'api' => 2,
+	'path' => backdrop_get_path('module', 'twitter'),
+	);
 }
 
 /**

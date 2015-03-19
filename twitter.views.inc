@@ -115,7 +115,7 @@ function twitter_views_data() {
     'title' => t('Message text'),
     'help' => t('The text of the Twitter message.'),
     'field' => array(
-      'handler' => 'twitter_views_handler_field_xss',
+      'handler' => 'views_handler_field_xss',
       'click sortable' => TRUE,
     ),
     'filter' => array(

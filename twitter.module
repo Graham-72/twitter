@@ -389,6 +389,10 @@ function twitter_config_info() {
     'label' => t('Twitter settings'),
     'group' => t('Configuration'),
   );
+  $prefixes['views.view.tweets'] = array(
+    'label' => t('Tweets'),
+    'group' => t('Views'),
+  );
   return $prefixes;
 }
 

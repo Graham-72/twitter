@@ -1,0 +1,11 @@
+[TwitterTest]      
+name = Main Twitter
+description = Tests main module features such as adding accounts or loading tweets
+group = Twitter
+file = core.test
+
+[TwitterInputFilterTest]
+name = Input filters
+description = Tests input filters provided by the Twitter module
+group = Twitter
+file = input_filters.test

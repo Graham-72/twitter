@@ -5,19 +5,7 @@
  * Functional tests for the twitter Module.
  */
 
-class TwitterTest extends DrupalWebTestCase {
-  /*'
-   * The getInfo() method provides information about the test.
-   * In order for the test to be run, the getInfo() method needs
-   * to be implemented.
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('Main'),
-      'description' => t('Tests main module features such as adding accounts or loading tweets.'),
-      'group' => t('Twitter'),
-    );
-  }
+class TwitterTest extends BackdropWebTestCase {
 
   /**
    * Prepares the testing environment
@@ -31,31 +19,31 @@ class TwitterTest extends DrupalWebTestCase {
    */
   public function testAccountAdditionNoOauth() {
     // Create user
-    $this->user = $this->drupalCreateUser(array(
+    $this->user = $this->backdropCreateUser(array(
       'add twitter accounts',
       'import own tweets',
     ));
-    $this->drupalLogin($this->user);
+    $this->backdropLogin($this->user);
 
     // Add a Twitter account
     $edit = array(
-      'screen_name' => 'drupal',
+      'screen_name' => 'backdropTest',
     );
-    $this->drupalPost('user/' . $this->user->uid . '/edit/twitter',
+    $this->backdropPost('user/' . $this->user->uid . '/edit/twitter',
                       $edit, t('Add account'));
-    $this->assertLink('drupal', 0,
+    $this->assertLink('backdrop', 0,
       t('Twitter account was added successfully'));
 
     // Load tweets
     twitter_cron();
-    $this->drupalGet('user/' . $this->user->uid . '/tweets');
+    $this->backdropGet('user/' . $this->user->uid . '/tweets');
     $elements = $this->xpath('//div[contains(@class, "view-tweets")]/div/table');
     $this->assertTrue(count($elements), 'Tweets were loaded successfully.');
     // Delete the Twitter account
     $edit = array(
       'accounts[0][delete]' => 1,
     );
-    $this->drupalPost('user/' . $this->user->uid . '/edit/twitter',
+    $this->backdropPost('user/' . $this->user->uid . '/edit/twitter',
                       $edit, t('Save changes'));
     $this->assertText(t('The Twitter account was deleted.'));
   }

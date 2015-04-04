@@ -10,6 +10,14 @@ define ('TWITTER_SEARCH',       'http://twitter.com');
 define ('TWITTER_TINYURL',      'http://tinyurl.com');
 
 /**
+ * Backdrop seems to need module_load_include more often than Drupal
+ * perhaps this is if wanted file is not in includes folder?
+ * this one is needed to get 'Twitter message' as a type of content
+ * to show as an option when creating a new view
+ */
+module_load_include('inc','twitter','twitter.views');
+
+/**
  * Implements hook_menu().
  */
 function twitter_menu() {

@@ -52,7 +52,7 @@ Existing and new users can sign in with Twitter by enabling the twitter_signin m
 
 <h2>Status</h2>
 
-This Backdrop version of a Drupal contributed module is under development.
+This is the initial Backdrop version of the Drupal project Twitter, version 7.x-5.8.
 
 
 <h2>License</h2>

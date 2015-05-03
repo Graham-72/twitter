@@ -1,4 +1,6 @@
 name = Twitter actions
 description = Exposes Backdrop actions to send Twitter messages.
 backdrop = 1.x
+version = 1.x-5.8.0
+type = module
 dependencies[] = twitter

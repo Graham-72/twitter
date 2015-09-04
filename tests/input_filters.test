@@ -6,6 +6,18 @@
  */
 
 class TwitterInputFilterTest extends BackdropWebTestCase {
+  /*'
+   * The getInfo() method provides information about the test.
+   * In order for the test to be run, the getInfo() method needs
+   * to be implemented.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => t('Input filters'),
+      'description' => t('Tests input filters provided by the Twitter module.'),
+      'group' => t('Twitter'),
+    );
+  }
 
   /**
    * Prepares the testing environment
@@ -36,7 +48,8 @@ class TwitterInputFilterTest extends BackdropWebTestCase {
       'filters[filter_autop][weight]' => 4,
       'filters[filter_htmlcorrector][weight]' => 5,
     );
-    $this->backdropPost('admin/config/content/formats/filtered_html', $edit, t('Save configuration'));
+    $this->backdropPost('admin/config/content/formats/filtered_html', $edit,
+      t('Save configuration'));
     $this->assertText(t('The text format Filtered HTML has been updated.'));
     $this->backdropGet('admin/config/content/formats/filtered_html');
     $this->assertFieldChecked('edit-filters-twitter-username-status',
@@ -44,16 +57,18 @@ class TwitterInputFilterTest extends BackdropWebTestCase {
     $this->assertFieldChecked('edit-filters-twitter-hashtag-status',
                               t('Twitter hashtag input filter has been activated'));
 
-    // Create a page so we can evaluate the filters
+    // Create a page so we can evaluate the filters.
     $search = '#backdropCMS';
     $username = '@backdropCMS';
     $edit = array();
     $edit['title'] = t('Test page');
-    $edit['body[und][0][value]'] = t('This is a search over #backdropCMS tag. There is also a link ' .
-      ' to a Twitter account here: @backdropCMS.');
+    $edit['body[und][0][value]'] = t('This is a search over #backdropCMS tag. There is also a link to a Twitter account here: @backdropCMS.');
     $this->backdropPost('node/add/page', $edit, t('Save'));
-    $this->assertText(t('Basic page @title has been created.', array('@title' => $edit['title'])));
-    $this->assertLink($search, 0, t('Twitter search input filter was created successfully.'));
-    $this->assertLink($username, 0, t('Twitter username input filter was created successfully.'));
+    $this->assertText(t('Basic page @title has been created.',
+      array('@title' => $edit['title'])));
+    $this->assertLink($search, 0,
+      t('Twitter search input filter was created successfully.'));
+    $this->assertLink($username, 0,
+      t('Twitter username input filter was created successfully.'));
   }
 }

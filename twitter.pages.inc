@@ -134,12 +134,16 @@ function twitter_admin_form_submit($form, &$form_state) {
   $config = config('twitter.settings');
   $config->set('twitter_import', $form_state['values']['twitter_import']);
   $config->set('twitter_expire', $form_state['values']['twitter_expire']);
+  $config->set('twitter_use_default_views', $form_state['values']['twitter_use_default_views']);
   $config->set('twitter_consumer_key', $form_state['values']['twitter_consumer_key']);
   $config->set('twitter_consumer_secret', $form_state['values']['twitter_consumer_secret']);
   $config->set('twitter_host', $form_state['values']['twitter_host']);
   $config->set('twitter_api', $form_state['values']['twitter_api']);
   $config->set('twitter_search', $form_state['values']['twitter_search']);
   $config->set('twitter_tinyurl', $form_state['values']['twitter_tinyurl']);
+  $config->set('twitter_media', $form_state['values']['twitter_media']);
+  $config->set('twitter_conversation', $form_state['values']['twitter_conversation']);
+  $config->set('twitter_align', $form_state['values']['twitter_align']);
   $config->save();
   backdrop_set_message(t('The configuration options have been saved.'));
 }

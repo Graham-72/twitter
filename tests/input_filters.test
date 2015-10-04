@@ -50,7 +50,7 @@ class TwitterInputFilterTest extends BackdropWebTestCase {
     );
     $this->backdropPost('admin/config/content/formats/filtered_html', $edit,
       t('Save configuration'));
-    $this->assertText(t('The text format Filtered HTML has been updated.'));
+    $this->assertText(t('Updated text format Filtered HTML.'));
     $this->backdropGet('admin/config/content/formats/filtered_html');
     $this->assertFieldChecked('edit-filters-twitter-username-status',
                               t('Twitter username input filter has been activated'));

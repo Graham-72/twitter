@@ -43,8 +43,8 @@ function twitter_connect($twitter_account = NULL, $access_global = FALSE, $force
     $auth = $twitter_account->get_auth();
     if (isset($auth['oauth_token']) && isset($auth['oauth_token_secret'])) {
       return new Twitter(
-        config_get('twitter.settings','twitter_consumer_key', ''),
-        config_get('twitter.settings','twitter_consumer_secret', ''),
+        config_get('twitter.settings','twitter_consumer_key'),
+        config_get('twitter.settings','twitter_consumer_secret'),
         $auth['oauth_token'],
         $auth['oauth_token_secret']
       );
@@ -283,9 +283,9 @@ function twitter_statuses_oembed($tweet_id) {
 
   else {
     $params = array(
-      'hide_media' => !config_get('twitter.settings','twitter_media', FALSE),
-      'hide_thread' => !config_get('twitter.settings','twitter_conversation', FALSE),
-      'align' => config_get('twitter.settings','twitter_align', 'none'),
+      'hide_media' => !config_get('twitter.settings','twitter_media'),
+      'hide_thread' => !config_get('twitter.settings','twitter_conversation'),
+      'align' => config_get('twitter.settings','twitter_align'),
     );
     return $twitter->statuses_oembed($tweet_id, $params);
   }
@@ -357,7 +357,7 @@ function twitter_fetch_user_timeline($id) {
  * Retweet a tweet.
  */
 function twitter_retweet($twitter_account, $tweet_id) {
-  module_load_include('lib.php', 'twitter');
+  module_load_include('inc', 'twitter','includes/twitter.lib');
 
   $twitter = twitter_connect($twitter_account);
   $twitter->retweet($tweet_id, $twitter_account);

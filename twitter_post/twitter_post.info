@@ -1,7 +1,7 @@
 name = Twitter Post
 description = Enables posting to twitter
 backdrop = 1.x
-version = 1.x-5.8.0
+version = 1.x-5.10.0
 type = module
 dependencies[] = twitter
 configure = admin/config/services/twitter/post

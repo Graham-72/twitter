@@ -14,17 +14,19 @@ function twitter_post_update_1000() {
   $config->set('twitter_post_types', update_variable_get('twitter_post_types', array()));
   $config->set('twitter_post_default_format', update_variable_get('twitter_post_default_format', ''));
   $config->set('twitter_post_default_value', update_variable_get('twitter_post_default_value', '0'));
+  $config->set('twitter_post_on_update', update_variable_get('twitter_post_on_update', '0'));
   $config->save();
 
   // Delete variables.
   update_variable_del('twitter_post_types');
   update_variable_del('twitter_post_default_format');
   update_variable_del('twitter_post_default_value');
+  update_variable_del('twitter_post_on_update');
 }
 
 /**
  * Implements hook_update_last_removed().
  */
 function twitter_post_update_last_removed() {
-  return 7301;
+  return 7500;
 }

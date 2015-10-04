@@ -1,5 +1,9 @@
 {
-    "_config_name": "twitter_signin.settings",
-    "twitter_signin_button": "Sign-in-with-Twitter-lighter-small.png",
-    "twitter_signin_register": "0"
+  "_config_name": "twitter_signin.settings",
+  "twitter_signin_button": "Sign-in-with-Twitter-lighter-small.png",
+  "twitter_signin_register": "0",
+  "twitter_signin_maintenance_mode": "0",
+  "twitter_signin_login": "1",
+  "password_inc": "includes/password.inc",
+  "twitter_signin_show_password": "1"
 }

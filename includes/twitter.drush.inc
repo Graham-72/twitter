@@ -56,7 +56,7 @@ function twitter_drush_command() {
  */
 function drush_twitter_search($keyword) {
   // Set up a Twitter object to query with.
-  module_load_include('inc', 'twitter');
+  module_load_include('inc','twitter','includes/twitter');
   $twitter = twitter_connect(NULL, TRUE, TRUE);
   if (empty($twitter)) {
     drush_set_error(dt('At least one Twitter account must be authenticated at admin/config/services/twitter in order to perform requests to the Twitter API.'));
@@ -64,7 +64,7 @@ function drush_twitter_search($keyword) {
   }
 
   // Build the query and get the response.
-  $url = config_get('twitter.settings','twitter_api', TWITTER_API) . '/1.1/search/tweets.json';
+  $url = config_get('twitter.settings','twitter_api') . '/1.1/search/tweets.json';
   $data = $twitter->auth_request($url, array('q' => $keyword));
   $data = json_decode($data);
 
@@ -131,7 +131,7 @@ function twitter_drush_tweet($tweet = NULL, $screen_name = NULL) {
   // Get a list of all authenticated accounts for the current user. If no user
   // was selected it will default to the anonymous user and therefore only list
   // global accounts.
-  module_load_include('inc', 'twitter');
+  module_load_include('inc','twitter','includes/twitter');
   $access_global = user_access('post to twitter with global account', $account);
   $accounts = array();
   foreach (twitter_load_authenticated_accounts($account->uid, $access_global) as $twitter_account) {

@@ -29,12 +29,24 @@ function twitter_post_admin_settings($form, &$form_state) {
 
   $form['twitter_post_default_value'] = array(
     '#type' => 'checkbox',
-    '#description' => t('When active, tweets will be automatically published.'),
-    '#title' => t('Post to twitter by default'),
+    '#title' => t('Post to Twitter by default'),
     '#default_value' => $config->get('twitter_post_default_value'),
+    '#description' => t('When active, tweets will be automatically posted when the node is first published.'),
   );
 
+  $form['twitter_post_on_node_update'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Post to Twitter on node update'),
+    '#description' => t('When active, tweets will be posted to Twitter on node update; this can lead to apparently duplicate tweets, so may not be wanted.'),
+    '#default_value' => $config->get('twitter_post_on_update'),
+    '#states' => array(
+      'visible' => array(
+        'input[name="twitter_post_default_value"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
 
+  // Add a submit button
   $form['actions']['#type'] = 'actions';
   $form['actions']['submit'] = array(
     '#type' => 'submit',
@@ -50,6 +62,7 @@ function twitter_post_admin_settings_submit($form, &$form_state) {
   $config->set('twitter_post_types', $form_state['values']['twitter_post_types']);
   $config->set('twitter_post_default_format', $form_state['values']['twitter_post_default_format']);
   $config->set('twitter_post_default_value', $form_state['values']['twitter_post_default_value']);
+  $config->set('twitter_post_on_node_update', $form_state['values']['twitter_post_on_node_update']);
   $config->save();
   backdrop_set_message(t('The configuration options have been saved.'));
 }

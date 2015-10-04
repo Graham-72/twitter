@@ -6,10 +6,16 @@ function twitter_signin_update_1000() {
   // Migrate variables to config.
   $config = config('twitter_signin.settings');
   $config->set('twitter_signin_button', update_variable_get('twitter_signin_button', 'Sign-in-with-Twitter-lighter-small.png'));
+  $config->set('twitter_signin_login', update_variable_get('twitter_signin_login', '1'));
+  $config->set('twitter_signin_maintenance_mode', update_variable_get('twitter_signin_maintenance_mode', '0'));
   $config->set('twitter_signin_register', update_variable_get('twitter_signin_register', '0'));
+  $config->set('twitter_signin_show_password', update_variable_get('twitter_signin_show_password', '1'));
   $config->save();
 
   // Delete variables.
   update_variable_del('twitter_signin_button');
+  update_variable_del('twitter_signin_login');
+  update_variable_del('twitter_signin_maintenance_mode');
   update_variable_del('twitter_signin_register');
+  update_variable_del('twitter_signin_show_password');
 }

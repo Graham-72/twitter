@@ -358,6 +358,7 @@ function theme_twitter_account_list_form($variables) {
       backdrop_render($element['protected']),
       backdrop_render($element['import']),
       backdrop_render($element['mentions']),
+      backdrop_render($element['is_global']),
       backdrop_render($element['delete']),
     ));
     $rows[] = $row;

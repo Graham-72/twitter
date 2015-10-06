@@ -1,422 +1,553 @@
 {
-    "_config_name": "views.view.tweets",
-    "name": "tweets",
-    "description": "Displays Twitter.com status messages for users who have associated Twitter accounts.",
-    "tag": "",
-    "base_table": "twitter",
-    "human_name": "Tweets - for Backdrop",
-    "core": "0",
-    "display": {
-        "default": {
-            "display_title": "Tweets",
-            "display_plugin": "default",
-            "display_options": {
-                "query": {
-                    "type": "views_query",
-                    "options": {
-                        "query_comment": false
-                    }
-                },
-                "use_more_always": false,
-                "access": {
-                    "type": "none"
-                },
-                "cache": {
-                    "type": "none"
-                },
-                "exposed_form": {
-                    "type": "basic"
-                },
-                "pager": {
-                    "type": "none"
-                },
-                "style_plugin": "table",
-                "style_options": {
-                    "grouping": "",
-                    "columns": {
-                        "profile_image_url": "profile_image_url",
-                        "text": "text",
-                        "created_time": "text"
-                    },
-                    "default": "-1",
-                    "info": {
-                        "profile_image_url": {
-                            "sortable": 0,
-                            "separator": ""
-                        },
-                        "text": {
-                            "sortable": 0,
-                            "separator": " &#8212; "
-                        },
-                        "created_time": {
-                            "sortable": 0,
-                            "separator": ""
-                        }
-                    }
-                },
-                "fields": {
-                    "profile_image_url": {
-                        "id": "profile_image_url",
-                        "table": "twitter_account",
-                        "field": "profile_image_url",
-                        "label": ""
-                    },
-                    "text": {
-                        "id": "text",
-                        "table": "twitter",
-                        "field": "text",
-                        "label": "",
-                        "element_label_colon": false,
-                        "link_urls": 1,
-                        "link_usernames": 1,
-                        "link_hashtags": 1
-                    },
-                    "created_time": {
-                        "id": "created_time",
-                        "table": "twitter",
-                        "field": "created_time",
-                        "label": "",
-                        "date_format": "time ago"
-                    }
-                },
-                "sorts": {
-                    "created_time": {
-                        "id": "created_time",
-                        "table": "twitter",
-                        "field": "created_time",
-                        "order": "DESC"
-                    }
-                },
-                "filters": {
-                    "protected": {
-                        "id": "protected",
-                        "table": "twitter_account",
-                        "field": "protected",
-                        "value": 0,
-                        "group": "0",
-                        "expose": {
-                            "operator": false
-                        }
-                    }
-                }
-            }
+  "_config_name": "views.view.tweets",
+  "name": "tweets",
+  "description": "Displays Twitter.com status messages for users who have associated Twitter accounts.",
+  "tag": "",
+  "disabled": false,
+  "base_table": "twitter",
+  "human_name": "Tweets - for Backdrop",
+  "core": "0",
+  "display": {
+    "default": {
+      "display_title": "Tweets",
+      "display_plugin": "default",
+      "display_options": {
+        "query": {
+          "type": "views_query",
+          "options": {
+            "query_comment": false
+          }
         },
-        "page_all_tweets": {
-            "display_title": "Tweets Raw",
-            "display_plugin": "page",
-            "display_options": {
-                "query": {
-                    "type": "views_query",
-                    "options": []
-                },
-                "defaults": {
-                    "title": false,
-                    "hide_admin_links": false,
-                    "pager": false,
-                    "style_plugin": false,
-                    "style_options": false,
-                    "row_plugin": false,
-                    "row_options": false,
-                    "fields": false,
-                    "arguments": false
-                },
-                "title": "Tweets",
-                "display_description": "Lists tweets within a table.",
-                "pager": {
-                    "type": "full",
-                    "options": {
-                        "items_per_page": "20",
-                        "offset": "0",
-                        "id": "0",
-                        "quantity": "9"
-                    }
-                },
-                "style_plugin": "table",
-                "style_options": {
-                    "columns": {
-                        "twitter_id": "twitter_id",
-                        "profile_image_url": "profile_image_url",
-                        "name": "name",
-                        "screen_name": "screen_name",
-                        "follow": "follow",
-                        "text": "text",
-                        "created_time": "created_time",
-                        "web_intents": "web_intents"
-                    },
-                    "default": "-1",
-                    "info": {
-                        "twitter_id": {
-                            "sortable": 0,
-                            "default_sort_order": "asc",
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "profile_image_url": {
-                            "sortable": 0,
-                            "default_sort_order": "asc",
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "name": {
-                            "sortable": 0,
-                            "default_sort_order": "asc",
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "screen_name": {
-                            "sortable": 0,
-                            "default_sort_order": "asc",
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "follow": {
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "text": {
-                            "sortable": 0,
-                            "default_sort_order": "asc",
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "created_time": {
-                            "sortable": 0,
-                            "default_sort_order": "asc",
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        },
-                        "web_intents": {
-                            "align": "",
-                            "separator": "",
-                            "empty_column": 0
-                        }
-                    }
-                },
-                "fields": {
-                    "twitter_id": {
-                        "id": "twitter_id",
-                        "table": "twitter",
-                        "field": "twitter_id",
-                        "label": "",
-                        "exclude": true,
-                        "element_label_colon": false
-                    },
-                    "profile_image_url": {
-                        "id": "profile_image_url",
-                        "table": "twitter_account",
-                        "field": "profile_image_url",
-                        "label": ""
-                    },
-                    "name": {
-                        "id": "name",
-                        "table": "twitter_account",
-                        "field": "name",
-                        "label": "",
-                        "alter": {
-                            "make_link": true,
-                            "path": "https://twitter.com/[screen_name]",
-                            "absolute": true,
-                            "target": "_blank"
-                        },
-                        "element_label_colon": false
-                    },
-                    "screen_name": {
-                        "id": "screen_name",
-                        "table": "twitter",
-                        "field": "screen_name",
-                        "label": "",
-                        "alter": {
-                            "make_link": true,
-                            "path": "https://twitter.com/[screen_name] ",
-                            "absolute": true,
-                            "prefix": "@",
-                            "target": "_blank"
-                        },
-                        "element_label_colon": false
-                    },
-                    "follow": {
-                        "id": "follow",
-                        "table": "twitter",
-                        "field": "follow",
-                        "label": "",
-                        "element_label_colon": false
-                    },
-                    "text": {
-                        "id": "text",
-                        "table": "twitter",
-                        "field": "text",
-                        "label": "",
-                        "element_label_colon": false,
-                        "link_urls": 1,
-                        "link_usernames": 1,
-                        "link_hashtags": 1
-                    },
-                    "created_time": {
-                        "id": "created_time",
-                        "table": "twitter",
-                        "field": "created_time",
-                        "label": "",
-                        "date_format": "time ago"
-                    },
-                    "web_intents": {
-                        "id": "web_intents",
-                        "table": "twitter",
-                        "field": "web_intents",
-                        "label": "",
-                        "element_label_colon": false
-                    }
-                },
-                "arguments": {
-                    "screen_name": {
-                        "id": "screen_name",
-                        "table": "twitter",
-                        "field": "screen_name",
-                        "title_enable": true,
-                        "title": "Tweets by @%1",
-                        "default_argument_type": "fixed",
-                        "summary": {
-                            "number_of_records": "0",
-                            "format": "default_summary"
-                        },
-                        "summary_options": {
-                            "items_per_page": "25"
-                        },
-                        "limit": "0"
-                    }
-                },
-                "path": "tweets-raw"
-            }
+        "use_more_always": false,
+        "access": {
+          "type": "none"
         },
-        "block": {
-            "display_title": "Block",
-            "display_plugin": "block",
-            "display_options": {
-                "query": {
-                    "type": "views_query",
-                    "options": []
-                },
-                "defaults": {
-                    "hide_admin_links": false,
-                    "use_more": false,
-                    "style_plugin": false,
-                    "style_options": false,
-                    "row_plugin": false,
-                    "row_options": false,
-                    "fields": false,
-                    "arguments": false
-                },
-                "use_more": true,
-                "style_plugin": "list",
-                "style_options": {
-                    "grouping": ""
-                },
-                "row_plugin": "fields",
-                "row_options": {
-                    "inline": {
-                        "text": "text",
-                        "created_time": "created_time"
-                    },
-                    "separator": " &#8212; "
-                },
-                "fields": {
-                    "text": {
-                        "id": "text",
-                        "table": "twitter",
-                        "field": "text",
-                        "label": "",
-                        "element_label_colon": false,
-                        "link_urls": 1,
-                        "link_usernames": 1,
-                        "link_hashtags": 1,
-                        "link_attributes": 1
-                    },
-                    "created_time": {
-                        "id": "created_time",
-                        "table": "twitter",
-                        "field": "created_time",
-                        "label": "",
-                        "date_format": "time ago"
-                    }
-                },
-                "block_description": "Tweets"
-            }
+        "cache": {
+          "type": "none"
         },
-        "page_2": {
-            "display_title": "Tweets",
-            "display_plugin": "page",
-            "display_options": {
-                "query": {
-                    "type": "views_query",
-                    "options": []
-                },
-                "defaults": {
-                    "title": false,
-                    "hide_admin_links": false,
-                    "pager": false,
-                    "style_plugin": false,
-                    "style_options": false,
-                    "row_plugin": false,
-                    "row_options": false,
-                    "fields": false,
-                    "arguments": false
-                },
-                "title": "Tweets",
-                "display_description": "Displays a formatted list of tweets",
-                "pager": {
-                    "type": "full",
-                    "options": {
-                        "items_per_page": "20",
-                        "offset": "0",
-                        "id": "0",
-                        "quantity": "9"
-                    }
-                },
-                "style_plugin": "list",
-                "row_plugin": "fields",
-                "fields": {
-                    "twitter_id": {
-                        "id": "twitter_id",
-                        "table": "twitter",
-                        "field": "twitter_id",
-                        "label": "",
-                        "exclude": true,
-                        "element_label_colon": false
-                    },
-                    "formatted_tweet": {
-                        "id": "formatted_tweet",
-                        "table": "twitter",
-                        "field": "formatted_tweet",
-                        "label": "",
-                        "element_label_colon": false
-                    }
-                },
-                "arguments": {
-                    "screen_name": {
-                        "id": "screen_name",
-                        "table": "twitter",
-                        "field": "screen_name",
-                        "title_enable": true,
-                        "title": "Tweets by @%1",
-                        "default_argument_type": "fixed",
-                        "summary": {
-                            "number_of_records": "0",
-                            "format": "default_summary"
-                        },
-                        "summary_options": {
-                            "items_per_page": "25"
-                        },
-                        "limit": "0"
-                    }
-                },
-                "path": "tweets"
+        "exposed_form": {
+          "type": "basic"
+        },
+        "pager": {
+          "type": "none"
+        },
+        "style_plugin": "table",
+        "style_options": {
+          "grouping": "",
+          "columns": {
+            "profile_image_url": "profile_image_url",
+            "text": "text",
+            "created_time": "text"
+          },
+          "default": "-1",
+          "info": {
+            "profile_image_url": {
+              "sortable": 0,
+              "separator": ""
+            },
+            "text": {
+              "sortable": 0,
+              "separator": " &#8212; "
+            },
+            "created_time": {
+              "sortable": 0,
+              "separator": ""
             }
+          }
+        },
+        "fields": {
+          "profile_image_url": {
+            "id": "profile_image_url",
+            "table": "twitter_account",
+            "field": "profile_image_url",
+            "label": ""
+          },
+          "text": {
+            "id": "text",
+            "table": "twitter",
+            "field": "text",
+            "label": "",
+            "element_label_colon": false,
+            "link_urls": 1,
+            "link_usernames": 1,
+            "link_hashtags": 1
+          },
+          "created_time": {
+            "id": "created_time",
+            "table": "twitter",
+            "field": "created_time",
+            "label": "",
+            "date_format": "time ago"
+          }
+        },
+        "sorts": {
+          "created_time": {
+            "id": "created_time",
+            "table": "twitter",
+            "field": "created_time",
+            "order": "DESC"
+          }
+        },
+        "filters": {
+          "protected": {
+            "id": "protected",
+            "table": "twitter_account",
+            "field": "protected",
+            "value": 0,
+            "group": "0",
+            "expose": {
+              "operator": false
+            }
+          }
         }
+      }
+    },
+    "page_all_tweets": {
+      "display_title": "Tweets Raw",
+      "display_plugin": "page",
+      "display_options": {
+        "query": {
+          "type": "views_query",
+          "options": []
+        },
+        "defaults": {
+          "title": false,
+          "hide_admin_links": false,
+          "pager": false,
+          "style_plugin": false,
+          "style_options": false,
+          "row_plugin": false,
+          "row_options": false,
+          "fields": false,
+          "arguments": false
+        },
+        "title": "Tweets",
+        "display_description": "Lists tweets within a table.",
+        "pager": {
+          "type": "full",
+          "options": {
+            "items_per_page": "20",
+            "offset": "0",
+            "id": "0",
+            "quantity": "9"
+          }
+        },
+        "style_plugin": "table",
+        "style_options": {
+          "columns": {
+            "twitter_id": "twitter_id",
+            "profile_image_url": "profile_image_url",
+            "name": "name",
+            "screen_name": "screen_name",
+            "follow": "follow",
+            "text": "text",
+            "created_time": "created_time",
+            "web_intents": "web_intents"
+          },
+          "default": "-1",
+          "info": {
+            "twitter_id": {
+              "sortable": 0,
+              "default_sort_order": "asc",
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "profile_image_url": {
+              "sortable": 0,
+              "default_sort_order": "asc",
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "name": {
+              "sortable": 0,
+              "default_sort_order": "asc",
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "screen_name": {
+              "sortable": 0,
+              "default_sort_order": "asc",
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "follow": {
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "text": {
+              "sortable": 0,
+              "default_sort_order": "asc",
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "created_time": {
+              "sortable": 0,
+              "default_sort_order": "asc",
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            },
+            "web_intents": {
+              "align": "",
+              "separator": "",
+              "empty_column": 0
+            }
+          }
+        },
+        "fields": {
+          "twitter_id": {
+            "id": "twitter_id",
+            "table": "twitter",
+            "field": "twitter_id",
+            "label": "",
+            "exclude": true,
+            "element_label_colon": false
+          },
+          "profile_image_url": {
+            "id": "profile_image_url",
+            "table": "twitter_account",
+            "field": "profile_image_url",
+            "label": ""
+          },
+          "name": {
+            "id": "name",
+            "table": "twitter_account",
+            "field": "name",
+            "label": "",
+            "alter": {
+              "make_link": true,
+              "path": "https://twitter.com/[screen_name]",
+              "absolute": true,
+              "target": "_blank"
+            },
+            "element_label_colon": false
+          },
+          "screen_name": {
+            "id": "screen_name",
+            "table": "twitter",
+            "field": "screen_name",
+            "label": "",
+            "alter": {
+              "make_link": true,
+              "path": "https://twitter.com/[screen_name] ",
+              "absolute": true,
+              "prefix": "@",
+              "target": "_blank"
+            },
+            "element_label_colon": false
+          },
+          "follow": {
+            "id": "follow",
+            "table": "twitter",
+            "field": "follow",
+            "label": "",
+            "element_label_colon": false
+          },
+          "text": {
+            "id": "text",
+            "table": "twitter",
+            "field": "text",
+            "label": "",
+            "element_label_colon": false,
+            "link_urls": 1,
+            "link_usernames": 1,
+            "link_hashtags": 1
+          },
+          "created_time": {
+            "id": "created_time",
+            "table": "twitter",
+            "field": "created_time",
+            "label": "",
+            "date_format": "time ago"
+          },
+          "web_intents": {
+            "id": "web_intents",
+            "table": "twitter",
+            "field": "web_intents",
+            "label": "",
+            "element_label_colon": false
+          }
+        },
+        "arguments": {
+          "screen_name": {
+            "id": "screen_name",
+            "table": "twitter",
+            "field": "screen_name",
+            "title_enable": true,
+            "title": "Tweets by @%1",
+            "default_argument_type": "fixed",
+            "summary": {
+              "number_of_records": "0",
+              "format": "default_summary"
+            },
+            "summary_options": {
+              "items_per_page": "25"
+            },
+            "limit": "0"
+          }
+        },
+        "path": "tweets-raw"
+      }
+    },
+    "block": {
+      "display_title": "Block",
+      "display_plugin": "block",
+      "display_options": {
+        "query": {
+          "type": "views_query",
+          "options": []
+        },
+        "defaults": {
+          "hide_admin_links": false,
+          "use_more": false,
+          "style_plugin": false,
+          "style_options": false,
+          "row_plugin": false,
+          "row_options": false,
+          "fields": false,
+          "arguments": false,
+          "filters": false,
+          "filter_groups": false
+        },
+        "use_more": true,
+        "style_plugin": "list",
+        "style_options": {
+          "grouping": ""
+        },
+        "row_plugin": "fields",
+        "row_options": {
+          "inline": {
+            "text": "text",
+            "created_time": "created_time"
+          },
+          "separator": " &#8212; "
+        },
+        "fields": {
+          "text": {
+            "id": "text",
+            "table": "twitter",
+            "field": "text",
+            "label": "",
+            "element_label_colon": false,
+            "link_urls": 1,
+            "link_usernames": 1,
+            "link_hashtags": 1,
+            "link_attributes": 1
+          },
+          "created_time": {
+            "id": "created_time",
+            "table": "twitter",
+            "field": "created_time",
+            "label": "",
+            "date_format": "time ago"
+          }
+        },
+        "block_description": "Tweets",
+        "filters": [],
+        "filter_groups": {
+          "operator": "AND",
+          "groups": {
+            "1": "AND"
+          }
+        }
+      }
+    },
+    "page_2": {
+      "display_title": "Tweets",
+      "display_plugin": "page",
+      "display_options": {
+        "query": {
+          "type": "views_query",
+          "options": []
+        },
+        "defaults": {
+          "title": false,
+          "hide_admin_links": false,
+          "pager": false,
+          "style_plugin": false,
+          "style_options": false,
+          "row_plugin": false,
+          "row_options": false,
+          "fields": false,
+          "arguments": false
+        },
+        "title": "Tweets",
+        "display_description": "Displays a formatted list of tweets",
+        "pager": {
+          "type": "full",
+          "options": {
+            "items_per_page": "20",
+            "offset": "0",
+            "id": "0",
+            "quantity": "9"
+          }
+        },
+        "style_plugin": "list",
+        "row_plugin": "fields",
+        "fields": {
+          "twitter_id": {
+            "id": "twitter_id",
+            "table": "twitter",
+            "field": "twitter_id",
+            "label": "",
+            "exclude": true,
+            "element_label_colon": false
+          },
+          "formatted_tweet": {
+            "id": "formatted_tweet",
+            "table": "twitter",
+            "field": "formatted_tweet",
+            "label": "",
+            "element_label_colon": false
+          }
+        },
+        "arguments": {
+          "screen_name": {
+            "id": "screen_name",
+            "table": "twitter",
+            "field": "screen_name",
+            "title_enable": true,
+            "title": "Tweets by @%1",
+            "default_argument_type": "fixed",
+            "summary": {
+              "number_of_records": "0",
+              "format": "default_summary"
+            },
+            "summary_options": {
+              "items_per_page": "25"
+            },
+            "limit": "0"
+          }
+        },
+        "path": "tweets"
+      }
+    },
+    "page_1": {
+      "display_title": "Tweets2",
+      "display_plugin": "page",
+      "display_options": {
+        "query": {
+          "type": "views_query",
+          "options": []
+        },
+        "defaults": {
+          "title": false,
+          "hide_admin_links": false,
+          "pager": false,
+          "style_plugin": false,
+          "style_options": false,
+          "row_plugin": false,
+          "row_options": false,
+          "fields": false,
+          "arguments": false
+        },
+        "title": "Tweets",
+        "display_description": "Lists tweets within a table.",
+        "pager": {
+          "type": "full",
+          "options": {
+            "items_per_page": "20",
+            "offset": "0",
+            "id": "0",
+            "quantity": "9"
+          }
+        },
+        "style_plugin": "list",
+        "style_options": {
+          "grouping": [],
+          "row_class": "",
+          "default_row_class": 1,
+          "row_class_special": 1,
+          "type": "ul",
+          "wrapper_class": "item-list",
+          "class": ""
+        },
+        "fields": {
+          "twitter_id": {
+            "id": "twitter_id",
+            "table": "twitter",
+            "field": "twitter_id",
+            "label": "",
+            "exclude": true,
+            "element_label_colon": false
+          },
+          "formatted_tweet": {
+            "id": "formatted_tweet",
+            "table": "twitter",
+            "field": "formatted_tweet",
+            "relationship": "none",
+            "group_type": "group",
+            "ui_name": "",
+            "label": "",
+            "exclude": 0,
+            "alter": {
+              "alter_text": 0,
+              "text": "",
+              "make_link": 0,
+              "path": "",
+              "absolute": 0,
+              "external": 0,
+              "replace_spaces": 0,
+              "path_case": "none",
+              "trim_whitespace": 0,
+              "alt": "",
+              "rel": "",
+              "link_class": "",
+              "prefix": "",
+              "suffix": "",
+              "target": "",
+              "nl2br": 0,
+              "max_length": "",
+              "word_boundary": 1,
+              "ellipsis": 1,
+              "more_link": 0,
+              "more_link_text": "",
+              "more_link_path": "",
+              "strip_tags": 0,
+              "trim": 0,
+              "preserve_tags": "",
+              "html": 0
+            },
+            "element_type": "",
+            "element_class": "",
+            "element_label_type": "",
+            "element_label_class": "",
+            "element_label_colon": false,
+            "element_wrapper_type": "",
+            "element_wrapper_class": "",
+            "element_default_classes": 1,
+            "empty": "",
+            "hide_empty": 0,
+            "empty_zero": 0,
+            "hide_alter_empty": 1
+          }
+        },
+        "arguments": {
+          "screen_name": {
+            "id": "screen_name",
+            "table": "twitter",
+            "field": "screen_name",
+            "title_enable": true,
+            "title": "Tweets by @%1",
+            "default_argument_type": "fixed",
+            "summary": {
+              "number_of_records": "0",
+              "format": "default_summary"
+            },
+            "summary_options": {
+              "items_per_page": "25"
+            },
+            "limit": "0"
+          }
+        },
+        "path": "tweets2"
+      }
     }
+  }
 }

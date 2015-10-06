@@ -14,7 +14,7 @@ define ('TWITTER_OAUTH_CALLBACK_URL', 'twitter/oauth');
  * Implements hook_menu().
  */
 function twitter_menu() {
-  $items[config_get('twitter.settings','twitter_oauth_callback_url')] = array(
+  $items['twitter/oauth'] = array(
     'title' => 'Twitter OAuth',
     // Allow all requests to this URL so that OAuth may work correctly.
     'access callback' => TRUE,
@@ -125,7 +125,7 @@ function twitter_theme() {
         'retweet' => NULL,
         'favorite' => NULL,
       ),
-      'template' => 'twitter_status',
+      'template' => 'templates/twitter_status',
       'path' => backdrop_get_path('module', 'twitter'),
     ),
     'twitter_user_accounts' => array(
@@ -507,7 +507,11 @@ function _twitter_filter_embed_tweet($text, $filter) {
  * Implements hook_views_api().
  */
 function twitter_views_api() {
-  return array('api' => 2);
+  return array(
+    'api' => 2,
+    'path' => backdrop_get_path('module', 'twitter') . '/includes',
+    'template path' => backdrop_get_path('module', 'twitter') . '/templates',
+  );
 }
 
 /**
@@ -626,6 +630,10 @@ function twitter_config_info() {
   $prefixes['twitter.settings'] = array(
     'label' => t('Twitter settings'),
     'group' => t('Configuration'),
+  );
+  $prefixes['views.view.tweets'] = array(
+    'label' => t('Tweets'),
+    'group' => t('Views'),
   );
   return $prefixes;
 }

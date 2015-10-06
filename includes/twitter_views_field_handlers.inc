@@ -164,7 +164,7 @@ class twitter_views_handler_field_formatted_tweet extends views_handler_field {
 
   function render($values) {
     backdrop_add_js('//platform.twitter.com/widgets.js', 'external');
-    backdrop_add_css(backdrop_get_path('module', 'twitter') . '/twitter.css');
+    backdrop_add_css(backdrop_get_path('module', 'twitter') . '/css/twitter.css');
     module_load_include('inc','twitter','includes/twitter');
 
     // Load tweet and author.

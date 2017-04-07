@@ -1,4 +1,22 @@
 {
   "_config_name": "twitter_actions.settings",
-  "site_name":""
+  "site_name": "",
+  "triggers": {
+    "twitter_actions_set_status_action": {
+      "node_view": 1,
+      "node_insert": 1,
+      "node_update": 1,
+      "node_delete": 1,
+      "comment_view": 1,
+      "comment_insert": 1,
+      "comment_update": 1,
+      "comment_delete": 1,
+      "user_view": 1,
+      "user_insert": 1,
+      "user_update": 1,
+      "user_delete": 1,
+      "user_login": 1,
+      "cron": 1
+    }
+  }
 }

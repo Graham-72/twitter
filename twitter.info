@@ -2,8 +2,6 @@ name = Twitter
 description = Adds integration with the Twitter microblogging service.
 php = 5.1
 backdrop = 1.x
-version = 1.x-5.10.0
 type = module
 dependencies[] = oauth_common
-
 configure = admin/config/services/twitter

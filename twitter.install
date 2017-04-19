@@ -14,8 +14,8 @@ function twitter_requirements($phase) {
   if ($phase == 'runtime') {
     // Verify that the Twitter Application keys are set.
     $requirements['twitter_keys'] = array('title' => $t('Twitter Application keys'));
-    $consumer_key = config_get('twitter.settings','twitter_consumer_key');
-    $consumer_secret = config_get('twitter.settings','twitter_consumer_secret');
+    $consumer_key = config_get('twitter.settings', 'twitter_consumer_key');
+    $consumer_secret = config_get('twitter.settings', 'twitter_consumer_secret');
     if (empty($consumer_key) || empty($consumer_secret)) {
       $requirements['twitter_keys']['value'] = $t('Missing');
       $requirements['twitter_keys']['description'] =
@@ -342,8 +342,8 @@ function twitter_install() {
   // Set the weight to 3, making it heavier than Pathauto.
   db_update('system')
     ->fields(array(
-        'weight' => 3,
-      ))
+      'weight' => 3,
+    ))
     ->condition('type', 'module')
     ->condition('name', 'twitter')
     ->execute();

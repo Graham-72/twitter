@@ -14,7 +14,8 @@
  *   array of stdClass objects with the associated Twitter accounts.
  * @see twitter_twitter_accounts()
  */
-function hook_twitter_accounts($account) {}
+function hook_twitter_accounts($account) {
+}
 
 /**
  * Notifies of a saved tweet.
@@ -23,7 +24,8 @@ function hook_twitter_accounts($account) {}
  *   stdClass containing information about the status message.
  * @see https://dev.twitter.com/docs/platform-objects/tweets for details about the contents of $status.
  */
-function hook_twitter_status_save($status) {}
+function hook_twitter_status_save($status) {
+}
 
 /**
  * Notify of a saved twitter account.
@@ -102,7 +104,8 @@ function hook_twitter_account_save($values) {
  * @param array $output
  *   A render array containing the user settings data.
  */
-function hook_twitter_user_settings_alter(&$output) {}
+function hook_twitter_user_settings_alter(&$output) {
+}
 
 /**
  * Notifies that the module is about to update a user timeline.
@@ -130,7 +133,10 @@ function hook_twitter_prefetch_timeline($account, $params) {
  * @see twitter_fetch_user_timeline()
  */
 function hook_twitter_statuses_alter(&$statues, $account) {
-  watchdog('mymodule', 'About to insert %count tweets for %screenname.', array('%count' => count($statuses), '%screenname' => $account->screen_name));
+  watchdog('mymodule', 'About to insert %count tweets for %screenname.', array(
+    '%count' => count($statuses),
+    '%screenname' => $account->screen_name
+  ));
 }
 
 /**
@@ -144,5 +150,8 @@ function hook_twitter_statuses_alter(&$statues, $account) {
  * @see twitter_fetch_user_timeline()
  */
 function hook_twitter_insert_statuses($statues, $account) {
-  watchdog('mymodule', '%count tweets were imported for %screenname.', array('%count' => count($statuses), '%screenname' => $account->screen_name));
+  watchdog('mymodule', '%count tweets were imported for %screenname.', array(
+    '%count' => count($statuses),
+    '%screenname' => $account->screen_name
+  ));
 }

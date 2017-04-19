@@ -4,11 +4,11 @@
  * Provides API integration with the Twitter microblogging service.
  */
 
-define ('TWITTER_HOST',         'https://twitter.com');
-define ('TWITTER_API',          'https://api.twitter.com');
-define ('TWITTER_SEARCH',       'https://twitter.com');
-define ('TWITTER_TINYURL',      'http://tinyurl.com');
-define ('TWITTER_OAUTH_CALLBACK_URL', 'twitter/oauth');
+define('TWITTER_HOST', 'https://twitter.com');
+define('TWITTER_API', 'https://api.twitter.com');
+define('TWITTER_SEARCH', 'https://twitter.com');
+define('TWITTER_TINYURL', 'http://tinyurl.com');
+define('TWITTER_OAUTH_CALLBACK_URL', 'twitter/oauth');
 
 /**
  * Implements hook_menu().
@@ -97,7 +97,7 @@ function twitter_account_access($account) {
   // permissions and is viewing their own user account.
   if ($user->uid == $account->uid && (user_access('add twitter accounts') || user_access('add authenticated twitter accounts'))) {
     return TRUE;
-}
+  }
 
   // Otherwise, verify that they have the 'administer users' permission.
   if (user_access('administer users')) {
@@ -158,7 +158,7 @@ function template_preprocess_twitter_status(&$variables) {
  * Renders a list of Twitter accounts for the user profile page.
  */
 function theme_twitter_user_accounts($variables) {
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
   $accounts = $variables['accounts'];
   $items = array();
   foreach ($accounts as $twitter_account) {
@@ -182,7 +182,7 @@ function twitter_shorten_url($url) {
     return shorten_url($url);
   }
   else {
-    $response = backdrop_http_request(config_get('twitter.settings','twitter_tinyurl') . "/api-create.php?url=" . $url);
+    $response = backdrop_http_request(config_get('twitter.settings', 'twitter_tinyurl') . "/api-create.php?url=" . $url);
     if ($response->code == 200) {
       return $response->data;
     }
@@ -198,12 +198,12 @@ function twitter_shorten_url($url) {
  * Imports new Twitter statuses for site users, and deletes expired tweets.
  */
 function twitter_cron() {
-  if (!config_get('twitter.settings','twitter_import')) {
+  if (!config_get('twitter.settings', 'twitter_import')) {
     watchdog('twitter', 'The Twitter module is configured to not download tweets right now.');
     return;
   }
 
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
 
   // Verify that there's at least one authenticated account that can be used to
   // do API calls.
@@ -218,11 +218,7 @@ function twitter_cron() {
   // Pull up a list of Twitter accounts that are flagged for updating, sorted
   // by how long it's been since we last updated them. This ensures that the
   // most out-of-date accounts get updated first.
-  $result = db_query_range("SELECT twitter_uid
-                            FROM {twitter_account}
-    WHERE uid > 0 AND import = 1
-                            ORDER BY last_refresh ASC",
-                            0, 20);
+  $result = db_query_range("SELECT twitter_uid FROM {twitter_account} WHERE uid > 0 AND import = 1 ORDER BY last_refresh ASC", 0, 20);
   try {
     foreach ($result as $account) {
       // Fetch tweets for this account.
@@ -242,15 +238,14 @@ function twitter_cron() {
         ->condition('twitter_uid', $twitter_account->id)
         ->execute();
     }
-  }
-  catch (TwitterException $e) {
+  } catch (TwitterException $e) {
     // The exception has already been logged so we do not need to do anything
     // here apart from catching it.
     watchdog('twitter', 'There was a problem loading tweets during cron.');
   }
 
   // Nuke old statuses.
-  if ($age = config_get('twitter.settings','twitter_expire')) {
+  if ($age = config_get('twitter.settings', 'twitter_expire')) {
     db_delete('twitter')
       ->condition('created_time', REQUEST_TIME - $age, '<')
       ->execute();
@@ -334,8 +329,8 @@ function _twitter_filter_tip_embed_tweet($filter, $format, $long = FALSE) {
  */
 function _twitter_filter_username($text, $filter = NULL) {
   $prefix = '@';
-  $destination = config_get('twitter.settings','twitter_host') . '/';
-  return _twitter_filter_text($text, $prefix, $destination, 'twitter-atreply');
+  $destination = config_get('twitter.settings', 'twitter_host') . '/';
+  return _twitter_filter_text($text, $prefix, $destination, 'twitter-timeline-atreply');
 }
 
 /**
@@ -351,8 +346,8 @@ function _twitter_filter_username($text, $filter = NULL) {
  */
 function _twitter_filter_hashtag($text, $filter = NULL) {
   $prefix = '#';
-  $destination = config_get('twitter.settings','twitter_search') . '/search?q=%23';
-  return _twitter_filter_text($text, $prefix, $destination, 'twitter-hashtag');
+  $destination = config_get('twitter.settings', 'twitter_search') . '/search?q=%23';
+  return _twitter_filter_text($text, $prefix, $destination, 'twitter-timeline-hashtag');
 }
 
 /**
@@ -433,9 +428,9 @@ function twitter_filter_message($message, $usernames = TRUE, $hashtags = TRUE, $
     $filter = new stdClass;
     $filter->settings = array(
       'filter_url_length' => 496,
-  );
+    );
     $message = _filter_url($message, $filter);
-}
+  }
 
   // Avoid XSS within the message.
   return filter_xss($message);
@@ -445,7 +440,7 @@ function twitter_filter_message($message, $usernames = TRUE, $hashtags = TRUE, $
  * Callback for Embedded Tweets.
  */
 function _twitter_filter_embed_tweet($text, $filter) {
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
 
   // Tags to skip and not recurse into.
   $ignore_tags = 'a|script|style|code|pre';
@@ -476,7 +471,7 @@ function _twitter_filter_embed_tweet($text, $filter) {
           $id = $tweet[3];
           $embed = twitter_statuses_oembed($id);
           $chunks[$i] = str_replace($url, $embed['html'], $chunks[$i]);
-}
+        }
       }
       // Text chunk is done, so next chunk must be a tag.
       $chunk_type = 'tag';
@@ -488,8 +483,7 @@ function _twitter_filter_embed_tweet($text, $filter) {
         if (preg_match("`<($ignore_tags)(?:\s|>)`i", $chunks[$i], $matches)) {
           $open_tag = $matches[1];
         }
-      }
-      // Otherwise, check whether this is the closing tag for $open_tag.
+      } // Otherwise, check whether this is the closing tag for $open_tag.
       else {
         if (preg_match("`<\/$open_tag>`i", $chunks[$i], $matches)) {
           $open_tag = '';
@@ -535,7 +529,7 @@ function twitter_twitter_accounts($account) {
     return array();
   }
 
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
 
   $query = db_select('twitter_account', 'ta')
     ->fields('ta', array('twitter_uid'))
@@ -554,7 +548,7 @@ function twitter_twitter_accounts($account) {
  * Removes user's Twitter accounts and tweets
  */
 function twitter_user_delete($account) {
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
   foreach ($account->twitter_accounts as $twitter_account) {
     twitter_account_delete($twitter_account->id);
   }
@@ -601,8 +595,8 @@ function twitter_field_extra_fields() {
  *   boolean TRUE if both the Twitter Application key and secret are set.
  */
 function twitter_api_keys() {
-  $key = config_get('twitter.settings','twitter_consumer_key');
-  $secret = config_get('twitter.settings','twitter_consumer_secret');
+  $key = config_get('twitter.settings', 'twitter_consumer_key');
+  $secret = config_get('twitter.settings', 'twitter_consumer_secret');
   return !(empty($key) && empty($secret));
 }
 
@@ -641,7 +635,7 @@ function twitter_config_info() {
 /**
  * Implements hook_autoload_info().
  */
-function twitter_autoload_info(){
+function twitter_autoload_info() {
   return array(
     'twitter_views_handler_field_xss' => 'includes/twitter_views_field_handlers.inc',
     'twitter_views_handler_field_profile_image' => 'includes/twitter_views_field_handlers.inc',

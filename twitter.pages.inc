@@ -15,13 +15,18 @@ function twitter_admin_form($form, &$form_state) {
   $form['misc']['twitter_import'] = array(
     '#type' => 'checkbox',
     '#title' => t('Import and display the Twitter statuses of site users who have entered their Twitter account information.'),
-    '#default_value' => config_get('twitter.settings','twitter_import'),
+    '#default_value' => config_get('twitter.settings', 'twitter_import'),
   );
   $form['misc']['twitter_expire'] = array(
     '#type' => 'select',
     '#title' => t('Delete old statuses'),
-    '#default_value' => config_get('twitter.settings','twitter_expire'),
-    '#options' => array(0 => t('Never')) + backdrop_map_assoc(array(604800, 2592000, 7776000, 31536000), 'format_interval'),
+    '#default_value' => config_get('twitter.settings', 'twitter_expire'),
+    '#options' => array(0 => t('Never')) + backdrop_map_assoc(array(
+        604800,
+        2592000,
+        7776000,
+        31536000
+      ), 'format_interval'),
     '#states' => array(
       'visible' => array(
         ':input[name=twitter_import]' => array('checked' => TRUE),
@@ -32,31 +37,31 @@ function twitter_admin_form($form, &$form_state) {
     '#type' => 'checkbox',
     '#title' => t('Use default views'),
     '#description' => t('The module includes custom displays managed by the Views module. Disabling this option will remove the bundled views provided by the Twitter module, allowing them to be more easily customized and exported.'),
-    '#default_value' => config_get('twitter.settings','twitter_use_default_views'),
+    '#default_value' => config_get('twitter.settings', 'twitter_use_default_views'),
   );
 
   $form['oauth'] = array(
     '#type' => 'fieldset',
     '#title' => t('OAuth Settings'),
     '#access' => module_exists('oauth_common'),
-    '#description' => t('To enable OAuth based access for twitter, you must <a href="@url">register your application</a> with Twitter and add the provided keys here.', array('@url' => 'https://apps.twitter.com')),
+    '#description' => t('To enable OAuth based access for twitter, you must <a href="@url">register your application</a> with Twitter and add the provided keys here.', array('@url' => 'https://dev.twitter.com/apps/new')),
   );
   $form['oauth']['twitter_oauth_callback_url'] = array(
     '#type' => 'textfield',
     '#title' => t('Callback URL'),
-    '#default_value' => config_get('twitter.settings','twitter_oauth_callback_url'),
+    '#default_value' => config_get('twitter.settings', 'twitter_oauth_callback_url'),
     '#description' => t('There is usually no need to modify this. Defaults to "%path".', array('%path' => TWITTER_OAUTH_CALLBACK_URL)),
   );
 
   $form['oauth']['twitter_consumer_key'] = array(
     '#type' => 'textfield',
     '#title' => t('OAuth Consumer key'),
-    '#default_value' => config_get('twitter.settings','twitter_consumer_key'),
+    '#default_value' => config_get('twitter.settings', 'twitter_consumer_key'),
   );
   $form['oauth']['twitter_consumer_secret'] = array(
     '#type' => 'textfield',
     '#title' => t('OAuth Consumer secret'),
-    '#default_value' => config_get('twitter.settings','twitter_consumer_secret'),
+    '#default_value' => config_get('twitter.settings', 'twitter_consumer_secret'),
   );
 
   // Twitter external APIs settings.
@@ -69,22 +74,22 @@ function twitter_admin_form($form, &$form_state) {
   $form['twitter']['twitter_host'] = array(
     '#type' => 'textfield',
     '#title' => t('Twitter host'),
-    '#default_value' => config_get('twitter.settings','twitter_host'),
+    '#default_value' => config_get('twitter.settings', 'twitter_host'),
   );
   $form['twitter']['twitter_api'] = array(
     '#type' => 'textfield',
     '#title' => t('Twitter API'),
-    '#default_value' => config_get('twitter.settings','twitter_api'),
+    '#default_value' => config_get('twitter.settings', 'twitter_api'),
   );
   $form['twitter']['twitter_search'] = array(
     '#type' => 'textfield',
     '#title' => t('Twitter search'),
-    '#default_value' => config_get('twitter.settings','twitter_search'),
+    '#default_value' => config_get('twitter.settings', 'twitter_search'),
   );
   $form['twitter']['twitter_tinyurl'] = array(
     '#type' => 'textfield',
     '#title' => t('TinyURL'),
-    '#default_value' => config_get('twitter.settings','twitter_tinyurl'),
+    '#default_value' => config_get('twitter.settings', 'twitter_tinyurl'),
   );
 
   // Embed tweet settings.
@@ -96,13 +101,13 @@ function twitter_admin_form($form, &$form_state) {
   $form['embed']['twitter_media'] = array(
     '#type' => 'checkbox',
     '#title' => t('Display Media'),
-    '#default_value' => config_get('twitter.settings','twitter_media'),
+    '#default_value' => config_get('twitter.settings', 'twitter_media'),
     '#description' => t('Display images, video and link previews referenced in the tweet.'),
   );
   $form['embed']['twitter_conversation'] = array(
     '#type' => 'checkbox',
     '#title' => t('Conversation view'),
-    '#default_value' => config_get('twitter.settings','twitter_conversation'),
+    '#default_value' => config_get('twitter.settings', 'twitter_conversation'),
     '#description' => t('Include previous tweets in the reply thread.'),
   );
   $form['embed']['twitter_align'] = array(
@@ -114,7 +119,7 @@ function twitter_admin_form($form, &$form_state) {
       'left' => t('Left'),
       'right' => t('Right'),
     ),
-    '#default_value' => config_get('twitter.settings','twitter_align'),
+    '#default_value' => config_get('twitter.settings', 'twitter_align'),
     '#description' => t('Specifies whether the embedded Tweet should be floated left, right, or center in the page relative to the parent element'),
   );
 
@@ -163,7 +168,7 @@ function twitter_user_settings($account = NULL) {
     $output = '<p>' . t('You need to authenticate at least one Twitter account in order to use the Twitter API. Please fill out the OAuth fields at <a href="@twitter-settings">Twitter Settings</a> and then return here.', $variables) . '</p>';
   }
   else {
-    module_load_include('inc','twitter','includes/twitter');
+    module_load_include('inc', 'twitter', 'includes/twitter');
     if (!$account) {
       $twitter_accounts = twitter_load_accounts();
     }
@@ -347,7 +352,7 @@ function theme_twitter_account_list_form($variables) {
     $row = array(
       backdrop_render($element['image']),
       backdrop_render($element['id']) . backdrop_render($element['screen_name']) .
-        backdrop_render($element['visible_name']),
+      backdrop_render($element['visible_name']),
       backdrop_render($element['description']),
     );
     if (user_access('administer twitter accounts')) {
@@ -396,8 +401,8 @@ function twitter_auth_account_form($form, $form_state) {
     '#type' => 'submit',
     '#value' => t('Go to Twitter to add an authenticated account'),
     '#prefix' => t('Authenticated accounts can post, sign in and pull mentions. ' .
-                   'At least one authenticated account is needed for Twitter ' .
-                   'module to work.</br>'),
+      'At least one authenticated account is needed for Twitter ' .
+      'module to work.</br>'),
   );
 
   return $form;
@@ -407,11 +412,12 @@ function twitter_auth_account_form($form, $form_state) {
  * Form validation for adding a new Twitter account.
  */
 function twitter_auth_account_form_validate($form, &$form_state) {
-  $key = config_get('twitter.settings','twitter_consumer_key');
-  $secret = config_get('twitter.settings','twitter_consumer_secret');
+  $key = config_get('twitter.settings', 'twitter_consumer_key');
+  $secret = config_get('twitter.settings', 'twitter_consumer_secret');
   if ($key == '' || $secret == '') {
     form_set_error('', t('Please configure your consumer key and secret key at ' .
-      '<a href="!url">Twitter settings</a>.', array( '!url' => url('admin/config/services/twitter'),
+      '<a href="!url">Twitter settings</a>.', array(
+      '!url' => url('admin/config/services/twitter'),
     )));
   }
 }
@@ -422,9 +428,9 @@ function twitter_auth_account_form_validate($form, &$form_state) {
  * Loads Twitter account details and adds them to the user account
  */
 function twitter_auth_account_form_submit($form, &$form_state) {
-  $key = config_get('twitter.settings','twitter_consumer_key');
-  $secret = config_get('twitter.settings','twitter_consumer_secret');
-  $oauth_callback = config_get('twitter.settings','twitter_oauth_callback_url');
+  $key = config_get('twitter.settings', 'twitter_consumer_key');
+  $secret = config_get('twitter.settings', 'twitter_consumer_secret');
+  $oauth_callback = config_get('twitter.settings', 'twitter_oauth_callback_url');
   $callback_url = url($oauth_callback, array('absolute' => TRUE));
 
   $twitter = new Twitter($key, $secret);
@@ -487,8 +493,8 @@ function twitter_oauth_callback_form($form, &$form_state) {
  * Validate results from Twitter OAuth return request.
  */
 function twitter_oauth_callback_form_validate($form, &$form_state) {
-  $key = config_get('twitter.settings','twitter_consumer_key');
-  $secret = config_get('twitter.settings','twitter_consumer_secret');
+  $key = config_get('twitter.settings', 'twitter_consumer_key');
+  $secret = config_get('twitter.settings', 'twitter_consumer_secret');
 
   if (isset($_SESSION['twitter_oauth'])) {
     $form_state['twitter_oauth'] = $_SESSION['twitter_oauth'];
@@ -511,7 +517,7 @@ function twitter_oauth_callback_form_validate($form, &$form_state) {
     form_set_error('oauth_token', t('Invalid Twitter OAuth request'));
   }
 
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
 
   if (!empty($token) && $twitter = new Twitter($key, $secret, $token['oauth_token'], $token['oauth_token_secret'])) {
     //Collect oauth_verifier from url
@@ -532,11 +538,11 @@ function twitter_oauth_callback_form_validate($form, &$form_state) {
  * in the DB.
  */
 function twitter_oauth_callback_form_submit($form, &$form_state) {
-  module_load_include('inc', 'twitter','includes/twitter');
-  $key = config_get('twitter.settings','twitter_consumer_key');
-  $secret = config_get('twitter.settings','twitter_consumer_secret');
+  module_load_include('inc', 'twitter', 'includes/twitter');
+  $key = config_get('twitter.settings', 'twitter_consumer_key');
+  $secret = config_get('twitter.settings', 'twitter_consumer_secret');
   $response = $form_state['twitter_oauth']['response'];
-  
+
   $twitter = new Twitter($key, $secret, $response['oauth_token'], $response['oauth_token_secret']);
   try {
     $twitter_account = $twitter->users_show($response['screen_name']);
@@ -607,7 +613,7 @@ function twitter_non_auth_account_form_submit($form, &$form_state) {
   $name = $form_state['values']['screen_name'];
   $twitter = twitter_connect(NULL, TRUE, TRUE);
   if (!$twitter) {
-   return FALSE;
+    return FALSE;
   }
 
   $twitter_account = $twitter->users_show($name, FALSE);

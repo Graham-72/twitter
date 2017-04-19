@@ -76,7 +76,11 @@ class twitter_views_handler_field_xss extends views_handler_field {
 class twitter_views_handler_field_profile_image extends views_handler_field {
   function render($values) {
     $value = $values->{$this->field_alias};
-    $output = theme('image', array('path' => $value, 'width' => 48, 'height' => 48));
+    $output = theme('image', array(
+      'path' => $value,
+      'width' => 48,
+      'height' => 48
+    ));
 
     // Convert to a protocol-relative URL so that the same image tag will work
     // regardless of whether the page is loaded via HTTP or HTTPS.
@@ -118,7 +122,8 @@ class twitter_views_handler_field_web_intents extends views_handler_field {
  */
 class twitter_views_handler_field_follow extends views_handler_field {
 
-  function query() {}
+  function query() {
+  }
 
   function render($values) {
     // Try to find the screen name.
@@ -127,13 +132,13 @@ class twitter_views_handler_field_follow extends views_handler_field {
     // If the screen name is available from the view then our work is done.
     if (!empty($values->twitter_screen_name)) {
       $screen_name = $values->twitter_screen_name;
-  }
+    }
 
     // If the twitter_id is passed in, look for this tweet and get the screen
     // name associated with it.
     elseif (!empty($values->twitter_id)) {
       $screen_name = db_query("SELECT screen_name FROM {twitter} WHERE twitter_id = :id", array(':id' => $values->twitter_id))->fetchField();
-}
+    }
 
     // If the created_time is passed in, look for this tweet and get the screen
     // name associated with it. This may result in multiple values,
@@ -160,12 +165,13 @@ class twitter_views_handler_field_follow extends views_handler_field {
  * @see https://dev.twitter.com/terms/display-requirements
  */
 class twitter_views_handler_field_formatted_tweet extends views_handler_field {
-  function query() {}
+  function query() {
+  }
 
   function render($values) {
     backdrop_add_js('//platform.twitter.com/widgets.js', 'external');
     backdrop_add_css(backdrop_get_path('module', 'twitter') . '/css/twitter.css');
-    module_load_include('inc','twitter','includes/twitter');
+    module_load_include('inc', 'twitter', 'includes/twitter');
 
     // Load tweet and author.
     $status = twitter_status_load($values->twitter_id);
@@ -175,9 +181,6 @@ class twitter_views_handler_field_formatted_tweet extends views_handler_field {
     return theme('twitter_status', array(
       'status' => $status,
       'author' => $author,
-      'reply' => t('Reply'),
-      'retweet' => t('Retweet'),
-      'favorite' => t('Favorite'),
     ));
   }
 }
@@ -187,7 +190,7 @@ class twitter_views_handler_field_formatted_tweet extends views_handler_field {
  */
 class twitter_views_handler_field_image extends views_handler_field {
 
- /**
+  /**
    * Default options form.
    */
   function option_definition() {
@@ -209,10 +212,10 @@ class twitter_views_handler_field_image extends views_handler_field {
       '#title' => t('Image size'),
       '#default_value' => $this->options['size'],
       '#options' => array(
-        'thumb'  => t('Thumb'),
-        'small'  => t('Small'),
+        'thumb' => t('Thumb'),
+        'small' => t('Small'),
         'medium' => t('Medium'),
-        'large'  => t('Large'),
+        'large' => t('Large'),
       ),
       '#description' => t('Choose an image size from the ones that Twitter has created for this image.'),
       '#weight' => -10,

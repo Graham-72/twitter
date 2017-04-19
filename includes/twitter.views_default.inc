@@ -4,7 +4,7 @@
  * Default views for Twitter module.
  */
 function twitter_views_default_views() {
-  if (!config_get('twitter.settings','twitter_use_default_views')) {
+  if (!config_get('twitter.settings', 'twitter_use_default_views')) {
     return;
   }
 

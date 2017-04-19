@@ -9,7 +9,7 @@
  */
 function twitter_views_data() {
   // Basic table information.
-  $data['twitter']['table']['group']  = t('Twitter');
+  $data['twitter']['table']['group'] = t('Twitter');
 
   // Advertise this table as a possible base table
   $data['twitter']['table']['base'] = array(
@@ -183,8 +183,8 @@ function twitter_views_data() {
   );
 
   // Table twitter_account.
-  $data['twitter_account']['table']['group']  = t('Twitter');
-  $data['twitter_account']['table']['group']  = t('Twitter Account');
+  $data['twitter_account']['table']['group'] = t('Twitter');
+  $data['twitter_account']['table']['group'] = t('Twitter Account');
   $data['twitter_account']['table']['join'] = array(
     'twitter' => array(
       'left_field' => 'screen_name',

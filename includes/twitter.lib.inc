@@ -11,7 +11,8 @@
 /**
  * Exception handling class.
  */
-class TwitterException extends Exception {}
+class TwitterException extends Exception {
+}
 
 /**
  * Primary Twitter API implementation class
@@ -29,7 +30,8 @@ class Twitter {
   protected $token;
 
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Authentication
    ***********************************************/
   /**
@@ -45,13 +47,12 @@ class Twitter {
   }
 
   public function get_request_token($params = array()) {
-    $oauth_callback = config_get('twitter.settings','twitter_oauth_callback_url');
-    $url = config_get('twitter.settings','twitter_api') . '/oauth/request_token';
+    $oauth_callback = config_get('twitter.settings', 'twitter_oauth_callback_url');
+    $url = config_get('twitter.settings', 'twitter_api') . '/oauth/request_token';
     try {
       $params = array_merge($params, array('oauth_callback' => url($oauth_callback, array('absolute' => TRUE))));
       $response = $this->auth_request($url, $params);
-    }
-    catch (TwitterException $e) {
+    } catch (TwitterException $e) {
       watchdog('twitter', '!message', array('!message' => $e->__toString()), WATCHDOG_ERROR);
       return FALSE;
     }
@@ -61,15 +62,15 @@ class Twitter {
   }
 
   public function get_authorize_url($token) {
-    $url = config_get('twitter.settings','twitter_api') . '/oauth/authorize';
-    $url.= '?oauth_token=' . $token['oauth_token'];
+    $url = config_get('twitter.settings', 'twitter_api') . '/oauth/authorize';
+    $url .= '?oauth_token=' . $token['oauth_token'];
 
     return $url;
   }
 
   public function get_authenticate_url($token) {
-    $url = config_get('twitter.settings','twitter_api') . '/oauth/authenticate';
-    $url.= '?oauth_token=' . $token['oauth_token'];
+    $url = config_get('twitter.settings', 'twitter_api') . '/oauth/authenticate';
+    $url .= '?oauth_token=' . $token['oauth_token'];
 
     return $url;
   }
@@ -78,13 +79,13 @@ class Twitter {
    * Request an access token to the Twitter API.
    * @see https://dev.twitter.com/docs/auth/implementing-sign-twitter
    *
-   * @param string$oauth_verifier
+   * @param string $oauth_verifier
    *   String an access token to append to the request or NULL.
    * @return
    *   String the access token or FALSE when there was an error.
    */
   public function get_access_token($oauth_verifier = NULL) {
-    $url = config_get('twitter.settings','twitter_api') . '/oauth/access_token';
+    $url = config_get('twitter.settings', 'twitter_api') . '/oauth/access_token';
 
     // Adding parameter oauth_verifier to auth_request
     $parameters = array();
@@ -94,8 +95,7 @@ class Twitter {
 
     try {
       $response = $this->auth_request($url, $parameters);
-    }
-    catch (TwitterException $e) {
+    } catch (TwitterException $e) {
       watchdog('twitter', '!message', array('!message' => $e->__toString()), WATCHDOG_ERROR);
       return FALSE;
     }
@@ -112,14 +112,13 @@ class Twitter {
     $request->sign_request($this->signature_method, $this->consumer, $this->token);
 
     try {
-    switch ($method) {
-      case 'GET':
-        return $this->request($request->to_url());
-      case 'POST':
-        return $this->request($request->get_normalized_http_url(), $request->get_parameters(), 'POST');
-    }
-  }
-    catch (TwitterException $e) {
+      switch ($method) {
+        case 'GET':
+          return $this->request($request->to_url());
+        case 'POST':
+          return $this->request($request->get_normalized_http_url(), $request->get_parameters(), 'POST');
+      }
+    } catch (TwitterException $e) {
       watchdog('twitter', '!message', array('!message' => $e->__toString()), WATCHDOG_ERROR);
       return FALSE;
     }
@@ -134,7 +133,7 @@ class Twitter {
     $data = '';
     if (count($params) > 0) {
       if ($method == 'GET') {
-        $url .= '?'. http_build_query($params, '', '&');
+        $url .= '?' . http_build_query($params, '', '&');
       }
       else {
         $data = http_build_query($params, '', '&');
@@ -192,7 +191,11 @@ class Twitter {
    *   stdClass response object.
    */
   protected function doRequest($url, $headers, $method, $data) {
-    return backdrop_http_request($url, array('headers' => $headers, 'method' => $method, 'data' => $data));
+    return backdrop_http_request($url, array(
+      'headers' => $headers,
+      'method' => $method,
+      'data' => $data
+    ));
   }
 
   /**
@@ -215,11 +218,12 @@ class Twitter {
    *   The complete path to the endpoint.
    */
   protected function create_url($path, $format = '.json') {
-    $url =  config_get('twitter.settings','twitter_api') .'/1.1/'. $path . $format;
+    $url = config_get('twitter.settings', 'twitter_api') . '/1.1/' . $path . $format;
     return $url;
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Helpers used to convert responses in objects
    ***********************************************/
 
@@ -265,7 +269,8 @@ class Twitter {
     }
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Timelines
    ***********************************************/
   /**
@@ -330,7 +335,8 @@ class Twitter {
     return $this->get_statuses('statuses/retweets_of_me', $params);
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Tweets
    ***********************************************/
   /**
@@ -439,7 +445,8 @@ class Twitter {
     return $this->call('statuses/oembed', $params, 'GET');
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Search
    ***********************************************/
   /**
@@ -460,7 +467,8 @@ class Twitter {
     return $this->get_statuses('statuses/oembed', $params);
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Streaming
    ***********************************************/
   /**
@@ -553,7 +561,8 @@ class Twitter {
     return $this->get_statuses('site', $params);
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Direct Messages
    ***********************************************/
   /**
@@ -646,7 +655,8 @@ class Twitter {
     return $this->call('direct_messages/new', $params, 'POST');
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Friends & Followers
    ***********************************************/
   /**
@@ -818,7 +828,7 @@ class Twitter {
     if ($device !== NULL) {
       $params['device'] = $device;
     }
-    if ($retweets!== NULL) {
+    if ($retweets !== NULL) {
       $params['retweets'] = $retweets;
     }
     return $this->call('friendships/update', $params, 'POST');
@@ -853,7 +863,8 @@ class Twitter {
     return $this->call('friendships/show', $params, 'GET');
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Users
    ***********************************************/
   /**
@@ -1212,7 +1223,8 @@ class Twitter {
     return $this->call('account/profile_banner', $params, 'GET');
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Favorites
    ***********************************************/
   /**
@@ -1235,7 +1247,8 @@ class Twitter {
     return $this->get_statuses('favorites/list', $params);
   }
 
-  /********************************************//**
+  /********************************************/
+  /**
    * Utilities
    ***********************************************/
   /**
@@ -1246,8 +1259,7 @@ class Twitter {
 
     try {
       $response = $this->auth_request($url, $params, $method);
-    }
-    catch (TwitterException $e) {
+    } catch (TwitterException $e) {
       watchdog('twitter', '!message', array('!message' => $e->__toString()), WATCHDOG_ERROR);
       throw $e;
     }
@@ -1308,7 +1320,7 @@ class TwitterStatus {
     // This is not passed in for the first tweet added while attaching a new
     // account to the system.
     if (!empty($values['entities'])) {
-    $this->entities = $values['entities'];
+      $this->entities = $values['entities'];
     }
 
     if (isset($values['user'])) {
@@ -1417,7 +1429,7 @@ class TwitterUser {
     if (!empty($values['created_at']) && $created_time = strtotime($values['created_at'])) {
       $this->created_time = $created_time;
     }
-    $this->utc_offset = $values['utc_offset']?$values['utc_offset']:0;
+    $this->utc_offset = $values['utc_offset'] ? $values['utc_offset'] : 0;
 
     if (isset($values['status'])) {
       $this->status = new TwitterStatus($values['status']);
@@ -1431,7 +1443,10 @@ class TwitterUser {
    *   array with the oauth token key and secret.
    */
   public function get_auth() {
-    return array('oauth_token' => $this->oauth_token, 'oauth_token_secret' => $this->oauth_token_secret);
+    return array(
+      'oauth_token' => $this->oauth_token,
+      'oauth_token_secret' => $this->oauth_token_secret
+    );
   }
 
   /**
@@ -1441,8 +1456,8 @@ class TwitterUser {
    *   Array with 'oauth_token' and 'oauth_token_secret' keys.
    */
   public function set_auth($values) {
-    $this->oauth_token = isset($values['oauth_token'])?$values['oauth_token']:NULL;
-    $this->oauth_token_secret = isset($values['oauth_token_secret'])?$values['oauth_token_secret']:NULL;
+    $this->oauth_token = isset($values['oauth_token']) ? $values['oauth_token'] : NULL;
+    $this->oauth_token_secret = isset($values['oauth_token_secret']) ? $values['oauth_token_secret'] : NULL;
   }
 
   /**

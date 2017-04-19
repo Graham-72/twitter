@@ -62,8 +62,8 @@ function twitter_actions_set_status_action_form($context) {
     '#cols' => '80',
     '#rows' => '3',
     '#description' => t('The message that should be sent. You may include the following variables: ' .
-                        '%site_name, %username, %node_url, %node_type, %title, %summary, %body, ' .
-                        '%tinyurl. Not all variables will be available in all contexts.'),
+      '%site_name, %username, %node_url, %node_type, %title, %summary, %body, ' .
+      '%tinyurl. Not all variables will be available in all contexts.'),
     '#required' => TRUE,
   );
 
@@ -81,7 +81,7 @@ function twitter_actions_set_status_action_form($context) {
  */
 function twitter_actions_account_options() {
   global $user;
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
   $twitter_accounts = twitter_load_authenticated_accounts($user->uid);
   $options = array();
   foreach ($twitter_accounts as $twitter_account) {
@@ -152,7 +152,7 @@ function twitter_actions_set_status_action($object, $context) {
   $twitter_uid = _twitter_actions_get_twitter_id($context['screen_name']);
   if ($twitter_uid) {
     global $user;
-    $variables['%site_name'] = config_get('twitter_actions.settings','site_name');
+    $variables['%site_name'] = config_get('twitter_actions.settings', 'site_name');
 
     // Setting variables array depending on action's group.
     switch ($context['group']) {
@@ -266,12 +266,11 @@ function twitter_actions_set_status_action($object, $context) {
  *   The message to post.
  */
 function twitter_actions_post($twitter_uid, $message) {
-  module_load_include('inc','twitter','includes/twitter');
+  module_load_include('inc', 'twitter', 'includes/twitter');
   $twitter_account = twitter_account_load($twitter_uid);
   try {
     twitter_set_status($twitter_account, $message);
-  }
-  catch (TwitterException $e) {
+  } catch (TwitterException $e) {
     backdrop_set_message(t('An error occurred when posting to Twitter. Check the system log for details.'), 'error');
   }
 }

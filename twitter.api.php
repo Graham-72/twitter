@@ -149,7 +149,7 @@ function hook_twitter_statuses_alter(&$statues, $account) {
  *
  * @see twitter_fetch_user_timeline()
  */
-function hook_twitter_insert_statuses($statues, $account) {
+function hook_twitter_insert_statuses($statuses, $account) {
   watchdog('mymodule', '%count tweets were imported for %screenname.', array(
     '%count' => count($statuses),
     '%screenname' => $account->screen_name

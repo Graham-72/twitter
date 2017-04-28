@@ -358,6 +358,13 @@ function twitter_fetch_user_timeline($id) {
 }
 
 /**
+ * Implements hook_twitter_prefetch_timeline().
+ */
+function twitter_twitter_prefetch_timeline($account, $params) {
+  watchdog('twitter', 'About to fetch the tweets for %screenname.', array('%screenname' => $account->screen_name));
+}
+
+/**
  * Retweet a tweet.
  */
 function twitter_retweet($twitter_account, $tweet_id) {

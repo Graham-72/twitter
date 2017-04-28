@@ -365,6 +365,16 @@ function twitter_twitter_prefetch_timeline($account, $params) {
 }
 
 /**
+ * Implements hook_twitter_insert_statuses().
+ */
+function twitter_twitter_insert_statuses($statuses, $account) {
+  watchdog('twitter', '%count tweets were imported for %screenname.', array(
+    '%count' => count($statuses),
+    '%screenname' => $account->screen_name
+  ));
+}
+
+/**
  * Retweet a tweet.
  */
 function twitter_retweet($twitter_account, $tweet_id) {

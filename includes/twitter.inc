@@ -432,10 +432,4 @@ function twitter_account_delete($twitter_uid) {
   $query = db_delete('twitter');
   $query->condition('screen_name', $twitter_account->screen_name);
   $query->execute();
-
-  // Delete from {authmap}.
-  $query = db_delete('authmap');
-  $query->condition('authname', $twitter_uid);
-  $query->condition('module', 'twitter');
-  $query->execute();
 }

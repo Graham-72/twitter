@@ -1397,9 +1397,9 @@ class TwitterUser {
 
   public $status;
 
-  protected $oauth_token;
+  public $oauth_token;
 
-  protected $oauth_token_secret;
+  public $oauth_token_secret;
 
   public function __construct($values = array()) {
     $this->id = $values['id'];

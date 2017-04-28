@@ -44,7 +44,7 @@ function twitter_admin_form($form, &$form_state) {
     '#type' => 'fieldset',
     '#title' => t('OAuth Settings'),
     '#access' => module_exists('oauth_common'),
-    '#description' => t('To enable OAuth based access for twitter, you must <a href="@url">register your application</a> with Twitter and add the provided keys here.', array('@url' => 'https://dev.twitter.com/apps/new')),
+    '#description' => t('To enable OAuth based access for twitter, you must <a href="@url">register your application</a> with Twitter and add the provided keys here.', array('@url' => 'https://apps.twitter.com/apps/new')),
   );
   $form['oauth']['twitter_oauth_callback_url'] = array(
     '#type' => 'textfield',
@@ -207,7 +207,7 @@ function twitter_user_settings($account = NULL) {
     if (user_access('add authenticated twitter accounts')) {
       $output['add_account']['form'] = backdrop_get_form('twitter_auth_account_form');
     }
-    if (twitter_connect()) {
+    if (user_access('add twitter accounts')) {
       $output['add_account']['non_auth'] = backdrop_get_form('twitter_non_auth_account_form');
     }
   }

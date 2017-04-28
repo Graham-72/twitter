@@ -351,10 +351,6 @@ function twitter_fetch_user_timeline($id) {
   // Trigger hook_twitter_insert_statuses().
   module_invoke_all('twitter_insert_statuses', $statuses, $twitter_account);
 
-  // Update account details.
-  if (count($statuses) > 0) {
-    twitter_account_save($statuses[0]->user);
-  }
 }
 
 /**

@@ -42,12 +42,13 @@ function twitter_connect($twitter_account = NULL, $access_global = FALSE, $force
   if (!empty($twitter_account)) {
     $auth = $twitter_account->get_auth();
     if (isset($auth['oauth_token']) && isset($auth['oauth_token_secret'])) {
-      return new Twitter(
+      $twitter = new Twitter(
         config_get('twitter.settings', 'twitter_consumer_key'),
         config_get('twitter.settings', 'twitter_consumer_secret'),
         $auth['oauth_token'],
         $auth['oauth_token_secret']
       );
+			return $twitter;
     }
   }
 
@@ -176,7 +177,8 @@ function twitter_load_account_names() {
  */
 function twitter_load_authenticated_accounts($uid = NULL, $access_global = TRUE, $force = FALSE) {
   $auth_accounts = array();
-
+  // Current user ID may be needed.
+  if (!$uid) {$uid = $GLOBALS['user']->uid;}
   // Load every Twitter account, check to see if each one is suitable.
   foreach (twitter_load_accounts() as $index => $twitter_account) {
     // Only include authenticated accounts.

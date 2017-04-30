@@ -51,7 +51,7 @@ function twitter_post_ctools_plugin_directory($owner, $plugin_type) {
  */
 function twitter_post_form_node_type_form_alter(&$form, $form_state, $form_id) {
   $type = $form['#node_type']->type;
-  $allowed_types = config_get('twitter_post.settings','twitter_post_types');
+  $allowed_types = config_get('twitter_post.settings', 'twitter_post_types');
 
   $form['workflow']['twitter_post'] = array(
     '#type' => 'checkbox',
@@ -70,7 +70,7 @@ function twitter_post_form_node_type_form_alter(&$form, $form_state, $form_id) {
  */
 function twitter_post_form_node_type_form_submit($form, $form_state) {
   $type = $form_state['values']['type'];
-  $allowed_types = config_get('twitter_post.settings','twitter_post_types');
+  $allowed_types = config_get('twitter_post.settings', 'twitter_post_types');
 
   if (!empty($form_state['values']['twitter_post'])) {
     $allowed_types[$type] = $type;
@@ -79,7 +79,7 @@ function twitter_post_form_node_type_form_submit($form, $form_state) {
     $allowed_types[$type] = 0;
   }
 
-  config_get('twitter_post.settings','twitter_post_types');
+  config_get('twitter_post.settings', 'twitter_post_types');
 }
 
 /**
@@ -90,12 +90,12 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
     $node = $form['#node'];
 
     // Fail early if Twitter posting hasn't been on this node type.
-    $allowed_types = config_get('twitter_post.settings','twitter_post_types');
+    $allowed_types = config_get('twitter_post.settings', 'twitter_post_types');
     if (empty($allowed_types[$node->type])) {
       return;
     }
 
-    module_load_include('inc','twitter','includes/twitter');
+    module_load_include('inc', 'twitter', 'includes/twitter');
     $twitter_form = twitter_post_form();
     if (!$twitter_form) {
       return;
@@ -114,14 +114,14 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
       '#id' => 'twitter-toggle',
     );
     $form['twitter'] += $twitter_form;
-    $form['twitter']['status']['#default_value'] = config_get('twitter_post.settings','twitter_post_default_format');
+    $form['twitter']['status']['#default_value'] = config_get('twitter_post.settings', 'twitter_post_default_format');
     $form['twitter']['status']['#description'] = t('The given text will be posted to twitter.com. You can use !url, !url-alias, !tinyurl, !title and !user as replacement text. Note that if a URL is being included, the maximum length of the rest of the tweet is 117 characters.');
     $form['twitter']['status']['#maxlength'] = 150;
 
     // Check the correct option based upon whether the node is published or not.
-    $default = config_get('twitter_post.settings','twitter_post_default_value');
+    $default = config_get('twitter_post.settings', 'twitter_post_default_value');
     if (!empty($node->nid) && !empty($node->status)) {
-      $default = config_get('twitter_post.settings','twitter_post_on_update');
+      $default = config_get('twitter_post.settings', 'twitter_post_on_update');
     }
     $form['twitter']['post']['#default_value'] = $default;
 
@@ -147,7 +147,7 @@ function twitter_post_form_alter(&$form, $form_state, $form_id) {
  */
 function twitter_post_node_insert($node) {
   if (!empty($node->status) && !empty($node->twitter) && !empty($node->twitter['post'])) {
-    module_load_include('inc','twitter','includes/twitter');
+    module_load_include('inc', 'twitter', 'includes/twitter');
 
     $twitter_account = twitter_account_load($node->twitter['account']);
 
@@ -159,7 +159,8 @@ function twitter_post_node_insert($node) {
     // global account and the user has access to global accounts, or it is tied
     // to the current user.
     if (!(($twitter_account->is_global && $access_global)
-      || $twitter_account->uid == $account->uid)) {
+      || $twitter_account->uid == $account->uid)
+    ) {
       return;
     }
 
@@ -168,7 +169,10 @@ function twitter_post_node_insert($node) {
       // 117 characters is the maximum that can be added to a tweet and still
       // have a URL, so don't allow the title to be longer than that.
       '!title' => truncate_utf8($node->title, 117, FALSE, TRUE),
-      '!url' => url('node/' . $node->nid, array('absolute' => TRUE, 'alias' => TRUE)),
+      '!url' => url('node/' . $node->nid, array(
+        'absolute' => TRUE,
+        'alias' => TRUE
+      )),
       '!url-alias' => url('node/' . $node->nid, array('absolute' => TRUE)),
       '!user' => $node->name,
     );
@@ -182,12 +186,16 @@ function twitter_post_node_insert($node) {
     $status = strtr($node->twitter['status'], $replacements);
     try {
       $status = twitter_set_status($twitter_account, $status);
-      backdrop_set_message(t('Successfully posted "%node" to Twitter: <a href="@status" target="_blank">@status</a>', array(
-        '@status' => _twitter_status_url($status),
-        '%node' => $node->title,
-      )));
-    }
-    catch (TwitterException $e) {
+      if ($status->id) {
+        backdrop_set_message(t('Successfully posted "%node" to Twitter: <a href="@status" target="_blank">@status</a>', array(
+          '@status' => _twitter_status_url($status),
+          '%node' => $node->title,
+        )));
+      }
+      else {
+        backdrop_set_message(t('Twitter did not publish the post.'));
+      }
+    } catch (TwitterException $e) {
       backdrop_set_message(t('An error occurred when posting to Twitter. Check the system log for details.'), 'error');
     }
 
@@ -260,7 +268,7 @@ function twitter_post_form($account = NULL) {
  * Implementation of hook_field_extra_fields().
  */
 function twitter_post_field_extra_fields() {
-  $types = config_get('twitter_post.settings','twitter_post_types');
+  $types = config_get('twitter_post.settings', 'twitter_post_types');
   $extra = array();
   foreach ($types as $type) {
     $extra['node'][$type] = array(
@@ -271,7 +279,7 @@ function twitter_post_field_extra_fields() {
           'weight' => 1,
         ),
       ),
-  );
+    );
   }
 
   return $extra;

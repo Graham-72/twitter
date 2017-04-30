@@ -23,7 +23,7 @@ function twitter_post_admin_settings($form, &$form_state) {
     '#title' => t('Default format string'),
     '#maxlength' => 140,
     '#description' => t('The given text will be used as a template for posting to Twitter.com. ' .
-                        'The following token replacements are available: !url, !url-alias, !tinyurl, !title, and !user'),
+      'The following token replacements are available: !url, !url-alias, !tinyurl, !title, and !user'),
     '#default_value' => $config->get('twitter_post_default_format'),
   );
 
@@ -34,7 +34,7 @@ function twitter_post_admin_settings($form, &$form_state) {
     '#description' => t('When active, tweets will be automatically posted when the node is first published.'),
   );
 
-  $form['twitter_post_on_node_update'] = array(
+  $form['twitter_post_on_update'] = array(
     '#type' => 'checkbox',
     '#title' => t('Post to Twitter on node update'),
     '#description' => t('When active, tweets will be posted to Twitter on node update; this can lead to apparently duplicate tweets, so may not be wanted.'),
@@ -62,7 +62,7 @@ function twitter_post_admin_settings_submit($form, &$form_state) {
   $config->set('twitter_post_types', $form_state['values']['twitter_post_types']);
   $config->set('twitter_post_default_format', $form_state['values']['twitter_post_default_format']);
   $config->set('twitter_post_default_value', $form_state['values']['twitter_post_default_value']);
-  $config->set('twitter_post_on_node_update', $form_state['values']['twitter_post_on_node_update']);
+  $config->set('twitter_post_on_update', $form_state['values']['twitter_post_on_update']);
   $config->save();
   backdrop_set_message(t('The configuration options have been saved.'));
 }

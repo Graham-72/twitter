@@ -22,8 +22,7 @@ function twitter_post_admin_settings($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Default format string'),
     '#maxlength' => 140,
-    '#description' => t('The given text will be used as a template for posting to Twitter.com. ' .
-      'The following token replacements are available: !url, !url-alias, !tinyurl, !title, and !user'),
+    '#description' => t('The given text will be used as a template for posting to Twitter.com. ' . 'The following token replacements are available: !url, !url-alias, !tinyurl, !title, !user and !timestamp'),
     '#default_value' => $config->get('twitter_post_default_format'),
   );
 

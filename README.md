@@ -6,7 +6,7 @@ blogging service and API-compatible alternatives like Identi.ca.
 Twitter module allows linking to Twitter accounts and listing 
 tweets as views.
 
-Three submodules (twitter-actions, twitter-post, twitter-signin) 
+Three submodules (twitter_actions, twitter_post, twitter_signin) 
 allow posting to twitter, executing actions/rules when tweeting 
 or login with a Twitter account.
 
@@ -79,7 +79,7 @@ Graham Oliver (github.com/Graham-72/)
 
 ## Credits
 
-This is a port of the Drupal project Twitter, version 7.x-5.10.
+This is a port of the Drupal project Twitter, version 7.x-5.11.
 
 ### Drupal Maintainers
 
